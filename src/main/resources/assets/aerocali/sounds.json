@@ -1,0 +1,17 @@
+{
+  "thruster": {
+    "sounds": [
+      { "name": "aerocali:thruster", "stream": false }
+    ]
+  },
+  "thruster_ion": {
+    "sounds": [
+      { "name": "aerocali:thruster_ion", "stream": false }
+    ]
+  },
+  "thruster_start": {
+    "sounds": [
+      { "name": "aerocali:thruster_start", "stream": false }
+    ]
+  }
+}
