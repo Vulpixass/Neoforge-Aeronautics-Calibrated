@@ -10,23 +10,22 @@ import net.vulpixass.aerocali.content.item.AerocaliItems;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
 
+import java.util.Objects;
+
 public class AerocaliItemProperties {
+    private static float res = 0;
 
     public static void register() {
-        ItemProperties.register(
-                AerocaliItems.NAVIGATION_ELEMENT.get(),
-                ResourceLocation.tryBuild(AeronauticsCalibrated.MOD_ID, "nav_angle"),
-                AerocaliItemProperties::computeAngle
-        );
+        ItemProperties.register(AerocaliItems.NAVIGATION_ELEMENT.get(),
+                Objects.requireNonNull(ResourceLocation.tryBuild(AeronauticsCalibrated.MOD_ID, "nav_angle")), AerocaliItemProperties::computeAngle);
     }
 
     private static float computeAngle(ItemStack stack, Level level, LivingEntity entity, int seed) {
         if (entity == null || level == null) return 0f;
 
-        NavTargetData data = stack.get(AerocaliDataComponents.NAV_TARGET.get());
+        NavTargetData data = AerocaliDataComponents.NAV_TARGET_DATA.get(stack);
         if (data == null) return 0f;
 
-        // Wrong dimension? Return random wobble like vanilla compass
         if (!level.dimension().location().toString().equals(data.dimension())) {
             return (entity.tickCount + seed) % 32;
         }
@@ -34,12 +33,20 @@ public class AerocaliItemProperties {
         double dx = data.x() + 0.5 - entity.getX();
         double dz = data.z() + 0.5 - entity.getZ();
 
-        double angle = Math.atan2(dz, dx); // radians
-        angle = angle < 0 ? angle + (Math.PI * 2) : angle;
+        double angle = Math.atan2(dz, dx) / (Math.PI * 2);
+        double rotation = entity.getViewYRot(1.0F) / 360.0;
 
-        // Convert radians to 0–32 stepped frame index
-        float frame = (float)(angle / (Math.PI * 2) * 32.0);
+        angle = angle + 0.5;
 
-        return frame;
+        return (float) Math.floorMod((long) ((angle - (rotation - 0.25)) * 32.0), 32);
     }
+
+    private static void debug(float result, LivingEntity entity, NavTargetData data) {
+        if (res != result) {
+            System.out.println("result: " + result + " whilst facing: " + entity.getDirection().toString()
+                    + " with coords: x=" + data.x() + " z=" + data.z() + "  Player coords: " + entity.blockPosition());
+        }
+        res = result;
+    }
+
 }

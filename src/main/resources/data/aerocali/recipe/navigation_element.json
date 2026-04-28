@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "minecraft:compass"
+    },
+    "I": {
+      "item": "create:inudstrial_iron_block"
+    }
+  },
+  "pattern": [
+    " I ",
+    "ICI",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "aerocali:navigation_element.json"
+  }
+}

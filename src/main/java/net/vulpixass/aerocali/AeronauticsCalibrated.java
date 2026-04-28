@@ -5,10 +5,14 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.vulpixass.aerocali.capabilities.AerocaliCapabilities;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
+import net.vulpixass.aerocali.content.item.data.NavDataStorage;
+import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
@@ -25,6 +29,11 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+
+import java.util.function.Function;
+
+import static net.vulpixass.aerocali.data.AerocaliDataComponents.NAV_TARGET;
+import static net.vulpixass.aerocali.data.AerocaliDataComponents.NAV_TARGET_DATA;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(AeronauticsCalibrated.MOD_ID)
@@ -77,6 +86,13 @@ public class AeronauticsCalibrated {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            NAV_TARGET_DATA = new NavDataStorage<>(
+                    NAV_TARGET.get(), // now safe
+                    () -> new NavTargetData(0, 0, 0, "minecraft:overworld"),
+                    Function.identity()
+            );
+        });
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

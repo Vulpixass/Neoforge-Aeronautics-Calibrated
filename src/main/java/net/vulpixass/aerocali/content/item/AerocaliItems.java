@@ -19,5 +19,5 @@ public class AerocaliItems {
             .register("incomplete_thermal_mechanism", () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> NAVIGATION_ELEMENT = ITEMS
-            .register("navigation_element", () -> new NavigationElementItem(new Item.Properties()));
+            .register("navigation_element", () -> new NavigationElementItem(new Item.Properties().stacksTo(1)));
 }

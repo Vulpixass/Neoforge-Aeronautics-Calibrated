@@ -1,5 +1,6 @@
 package net.vulpixass.aerocali.data;
 
+import dev.simulated_team.simulated.content.blocks.nav_table.navigation_target.NavigationTarget;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -7,18 +8,24 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.vulpixass.aerocali.AeronauticsCalibrated;
+import net.vulpixass.aerocali.content.item.data.NavDataStorage;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
+import net.vulpixass.aerocali.content.item.data.target.AerocaliNavTarget;
 
 public class AerocaliDataComponents {
 
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, AeronauticsCalibrated.MOD_ID);
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<NavTargetData>> NAV_TARGET =
-            DATA_COMPONENTS.register("nav_target", () ->
-                    DataComponentType.<NavTargetData>builder()
-                            .persistent(NavTargetData.CODEC)
-                            .networkSynchronized(NavTargetData.STREAM_CODEC)
-                            .build()
-            );
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<NavTargetData>> NAV_TARGET = DATA_COMPONENTS
+            .register("nav_target", () -> DataComponentType.<NavTargetData>builder().persistent(NavTargetData.CODEC)
+                    .networkSynchronized(NavTargetData.STREAM_CODEC).build());
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<AerocaliNavTarget>> NAV_TABLE_TARGET =
+            DATA_COMPONENTS.register("nav_table_target", () -> DataComponentType.<AerocaliNavTarget>builder()
+                    .persistent(AerocaliNavTarget.CODEC).networkSynchronized(AerocaliNavTarget.STREAM_CODEC).build());
+
+
+    public static NavDataStorage<NavTargetData> NAV_TARGET_DATA;
+
 }
