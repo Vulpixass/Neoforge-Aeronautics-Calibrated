@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aerocali:item/incomplete_thermal_mechanism"
+  }
+}

@@ -11,6 +11,7 @@ import net.vulpixass.aerocali.content.block.AerocaliBlocks;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
+import net.vulpixass.aerocali.data.AerocaliDataComponents;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -67,6 +68,8 @@ public class AeronauticsCalibrated {
         AerocaliParticles.register(modEventBus);
         AerocaliSounds.SOUNDS.register(modEventBus);
 
+        AerocaliDataComponents.DATA_COMPONENTS.register(modEventBus);
+
         modEventBus.addListener(this::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
@@ -82,6 +85,9 @@ public class AeronauticsCalibrated {
         }
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(AerocaliItems.ION_UPGRADE);
+        }
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(AerocaliItems.THERMAL_MECHANISM);
         }
     }
 

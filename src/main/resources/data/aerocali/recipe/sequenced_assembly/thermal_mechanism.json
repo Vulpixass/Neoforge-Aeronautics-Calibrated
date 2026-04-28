@@ -1,0 +1,114 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:iron_sheet"
+  },
+  "loops": 5,
+  "results": [
+    {
+      "chance": 120.0,
+      "id": "aerocali:thermal_mechanism"
+    },
+    {
+      "chance": 8.0,
+      "id": "create:iron_sheet"
+    },
+    {
+      "chance": 8.0,
+      "id": "create:andesite_alloy"
+    },
+    {
+      "chance": 5.0,
+      "id": "create:cogwheel"
+    },
+    {
+      "chance": 2.0,
+      "id": "create:shaft"
+    },
+    {
+      "id": "minecraft:iron_ingot"
+    },
+    {
+      "id": "minecraft:compass"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "aerocali:incomplete_thermal_mechanism"
+        },
+        {
+          "item": "create:fluid_pipe"
+        }
+      ],
+      "results": [
+        {
+          "id": "aerocali:incomplete_thermal_mechanism"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "aerocali:incomplete_thermal_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "id": "aerocali:incomplete_thermal_mechanism"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "aerocali:incomplete_thermal_mechanism"
+        },
+        {
+          "item": "create:large_cogwheel"
+        }
+      ],
+      "results": [
+        {
+          "id": "aerocali:incomplete_thermal_mechanism"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "aerocali:incomplete_thermal_mechanism"
+        },
+        {
+          "item": "minecraft:netherite_scrap"
+        }
+      ],
+      "results": [
+        {
+          "id": "aerocali:incomplete_thermal_mechanism"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "aerocali:incomplete_thermal_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "id": "aerocali:incomplete_thermal_mechanism"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "aerocali:incomplete_thermal_mechanism"
+  }
+}

@@ -9,6 +9,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.vulpixass.aerocali.client.AerocaliItemProperties;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
 import net.vulpixass.aerocali.content.particle.ThrustParticles;
 
@@ -26,7 +27,7 @@ public class AeronauticsCalibratedClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-
+        AerocaliItemProperties.register();
     }
     @SubscribeEvent
     public static void registerParticleFactories(RegisterParticleProvidersEvent event) {

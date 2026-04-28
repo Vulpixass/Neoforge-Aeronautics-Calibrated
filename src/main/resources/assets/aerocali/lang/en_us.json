@@ -1,4 +1,6 @@
 {
   "block.aerocali.thruster": "Thruster",
-  "item.aerocali.ion_upgrade": "Ion Thruster Upgrade"
+  "item.aerocali.ion_upgrade": "Ion Thruster Upgrade",
+  "item.aerocali.thermal_mechanism": "Thermal Mechanism",
+  "item.aerocali.incomplete_thermal_mechanism": "Incomplete Thermal Mechanism"
 }
