@@ -1,16 +1,24 @@
 package net.vulpixass.aerocali;
 
+import dev.simulated_team.simulated.Simulated;
+import dev.simulated_team.simulated.content.blocks.nav_table.navigation_target.NavigationTarget;
+import dev.simulated_team.simulated.index.SimDataComponents;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.vulpixass.aerocali.capabilities.AerocaliCapabilities;
+import net.vulpixass.aerocali.compat.NavElementRegistry;
+import net.vulpixass.aerocali.compat.NavTarget;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
+import net.vulpixass.aerocali.content.item.custom.NavigationElementItem;
 import net.vulpixass.aerocali.content.item.data.NavDataStorage;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
@@ -69,6 +77,8 @@ public class AeronauticsCalibrated {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerCapabilities);
+        AerocaliDataComponents.DATA_COMPONENTS.register(modEventBus);
+
         AerocaliBlocks.BLOCKS.register(modEventBus);
         AerocaliItems.ITEMS.register(modEventBus);
 
@@ -77,21 +87,19 @@ public class AeronauticsCalibrated {
         AerocaliParticles.register(modEventBus);
         AerocaliSounds.SOUNDS.register(modEventBus);
 
-        AerocaliDataComponents.DATA_COMPONENTS.register(modEventBus);
-
         modEventBus.addListener(this::addCreative);
+
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        NavElementRegistry.init();
         event.enqueueWork(() -> {
-            NAV_TARGET_DATA = new NavDataStorage<>(
-                    NAV_TARGET.get(), // now safe
+            NAV_TARGET_DATA = new NavDataStorage<>(NAV_TARGET.get(),
                     () -> new NavTargetData(0, 0, 0, "minecraft:overworld"),
-                    Function.identity()
-            );
+                    Function.identity());
         });
     }
 
@@ -127,5 +135,11 @@ public class AeronauticsCalibrated {
 
                     return null;
                 });
+    }
+    @SubscribeEvent
+    public static void onModifyDefaultComponents(ModifyDefaultComponentsEvent event) {
+        event.modify(AerocaliItems.NAVIGATION_ELEMENT.get(), builder ->
+                builder.set(SimDataComponents.TARGET, new NavTarget())
+        );
     }
 }

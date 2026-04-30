@@ -3,7 +3,6 @@ package net.vulpixass.aerocali.content.item.custom;
 import dev.simulated_team.simulated.index.SimDataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -11,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
-import net.vulpixass.aerocali.content.item.data.target.AerocaliNavTarget;
+import net.vulpixass.aerocali.compat.NavTarget;
 import net.vulpixass.aerocali.content.ui.NavInputScreen;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
 
@@ -45,6 +44,9 @@ public class NavigationElementItem extends Item {
             return InteractionResultHolder.sidedSuccess(stack, true);
         }
 
+        if (player.isShiftKeyDown() && data != null) {
+            stack.set(AerocaliDataComponents.NAV_TARGET.get(), new NavTargetData(data.x(), data.y(), data.z(), "overworld"));
+        }
         return InteractionResultHolder.sidedSuccess(stack, false);
     }
 

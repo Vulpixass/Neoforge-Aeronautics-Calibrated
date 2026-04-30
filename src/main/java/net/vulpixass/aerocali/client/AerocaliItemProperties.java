@@ -40,13 +40,4 @@ public class AerocaliItemProperties {
 
         return (float) Math.floorMod((long) ((angle - (rotation - 0.25)) * 32.0), 32);
     }
-
-    private static void debug(float result, LivingEntity entity, NavTargetData data) {
-        if (res != result) {
-            System.out.println("result: " + result + " whilst facing: " + entity.getDirection().toString()
-                    + " with coords: x=" + data.x() + " z=" + data.z() + "  Player coords: " + entity.blockPosition());
-        }
-        res = result;
-    }
-
 }

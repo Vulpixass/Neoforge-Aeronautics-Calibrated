@@ -10,7 +10,6 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.vulpixass.aerocali.AeronauticsCalibrated;
 import net.vulpixass.aerocali.content.item.data.NavDataStorage;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
-import net.vulpixass.aerocali.content.item.data.target.AerocaliNavTarget;
 
 public class AerocaliDataComponents {
 
@@ -20,11 +19,6 @@ public class AerocaliDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<NavTargetData>> NAV_TARGET = DATA_COMPONENTS
             .register("nav_target", () -> DataComponentType.<NavTargetData>builder().persistent(NavTargetData.CODEC)
                     .networkSynchronized(NavTargetData.STREAM_CODEC).build());
-
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<AerocaliNavTarget>> NAV_TABLE_TARGET =
-            DATA_COMPONENTS.register("nav_table_target", () -> DataComponentType.<AerocaliNavTarget>builder()
-                    .persistent(AerocaliNavTarget.CODEC).networkSynchronized(AerocaliNavTarget.STREAM_CODEC).build());
-
 
     public static NavDataStorage<NavTargetData> NAV_TARGET_DATA;
 

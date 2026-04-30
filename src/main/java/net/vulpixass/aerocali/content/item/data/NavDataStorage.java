@@ -19,9 +19,4 @@ public record NavDataStorage<T>(DataComponentType<T> type, Supplier<T> defaultSu
         stack.set(type, validator.apply(value));
     }
 
-    public void syncToServer(ItemStack stack, T value) {
-        set(stack, value);
-        // TODO: send your packet here
-        // AerocaliNetwork.sendToServer(new NavDataPacket(type, value));
-    }
 }
