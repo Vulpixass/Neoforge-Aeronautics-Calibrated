@@ -84,11 +84,14 @@ configurations {
 }
 
 dependencies {
-    //MC1.21-1.3.0+67
+    //Registrate
     implementation "com.tterrag.registrate:Registrate:MC1.21-1.3.0+67"
 
     // Create 6.0.10 for NeoForge (from ModrinthMaven)
     implementation "maven.modrinth:create:UjX6dr61"
+
+    // Flywheel
+    implementation "dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:1.0.6"
 
     // Sable 1.1.3 for Neoforge (from CurseMaven)
     implementation "curse.maven:sable-1312371:7965090"

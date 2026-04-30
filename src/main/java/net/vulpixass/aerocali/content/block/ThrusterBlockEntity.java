@@ -4,12 +4,14 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import dev.eriksonn.aeronautics.content.blocks.propeller.small.BasePropellerBlock;
 import dev.eriksonn.aeronautics.content.blocks.propeller.small.BasePropellerBlockEntity;
 import dev.ryanhcode.sable.api.block.propeller.BlockEntityPropeller;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -31,7 +33,7 @@ import java.util.List;
 
 public class ThrusterBlockEntity extends BasePropellerBlockEntity implements BlockEntityPropeller {
 
-    private final ThrusterEnergy energy = new ThrusterEnergy(5000, 500, 2000);
+    private final ThrusterEnergy energy = new ThrusterEnergy(5000, 5000, 5000);
 
     private int soundCooldown = 0;
     private boolean active = false;
@@ -277,6 +279,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         super.write(tag, registries, clientPacket);
         tag.putFloat("Thrust", thrust);
         tag.putFloat("Airflow", airflow);
+        tag.putInt("Energy", energy.getEnergyStored());
     }
 
     @Override
@@ -284,6 +287,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         super.read(tag, registries, clientPacket);
         if (tag.contains("Thrust")) thrust = tag.getFloat("Thrust");
         if (tag.contains("Airflow")) airflow = tag.getFloat("Airflow");
+        if (tag.contains("Energy")) energy.setEnergy(tag.getInt("Energy"));
     }
 
     private int getRedstonePower() {
@@ -298,5 +302,17 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         public void setEnergy(int amount) {
             this.energy = Math.min(capacity, Math.max(0, amount));
         }
+    }
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+
+        tooltip.add(Component.literal("    Thruster Stats:").withStyle(ChatFormatting.WHITE));
+
+        tooltip.add(Component.literal("     » Stored: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(energy.getEnergyStored() + " / " + energy.getMaxEnergyStored() + " FE")
+                        .withStyle(ChatFormatting.GOLD)));
+
+        return true;
     }
 }

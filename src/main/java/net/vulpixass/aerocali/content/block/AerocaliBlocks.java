@@ -20,4 +20,10 @@ public class AerocaliBlocks {
     public static final DeferredItem<BlockItem> THRUSTER_ITEM = ITEMS.register("thruster",
             () -> new BlockItem(AerocaliBlocks.THRUSTER.get(), new Item.Properties()));
 
+    public static final DeferredHolder<Block, GeneratorBlock> GENERATOR =
+            BLOCKS.register("generator",
+                    () -> new GeneratorBlock(Block.Properties.of().strength(2f)));
+    public static final DeferredItem<BlockItem> GENERATOR_ITEM = ITEMS.register("generator",
+            () -> new BlockItem(AerocaliBlocks.GENERATOR.get(), new Item.Properties()));
+
 }

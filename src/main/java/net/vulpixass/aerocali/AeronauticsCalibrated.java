@@ -1,5 +1,6 @@
 package net.vulpixass.aerocali;
 
+import dev.eriksonn.aeronautics.Aeronautics;
 import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.content.blocks.nav_table.navigation_target.NavigationTarget;
 import dev.simulated_team.simulated.index.SimDataComponents;
@@ -17,6 +18,7 @@ import net.vulpixass.aerocali.compat.NavElementRegistry;
 import net.vulpixass.aerocali.compat.NavTarget;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
+import net.vulpixass.aerocali.content.block.GeneratorBlock;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
 import net.vulpixass.aerocali.content.item.custom.NavigationElementItem;
 import net.vulpixass.aerocali.content.item.data.NavDataStorage;
@@ -113,6 +115,10 @@ public class AeronauticsCalibrated {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(AerocaliItems.THERMAL_MECHANISM);
         }
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(AerocaliBlocks.THRUSTER_ITEM);
+            event.accept(AerocaliBlocks.GENERATOR_ITEM);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -125,6 +131,8 @@ public class AeronauticsCalibrated {
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.THRUSTER.get(),
                 (thruster, ctx) -> thruster.getEnergyStorage());
+        event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.GENERATOR.get(),
+                (generator, ctx) -> generator.getEnergyStorage());
 
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.THRUSTER.get(),
                 (thruster, side) -> {
@@ -135,6 +143,19 @@ public class AeronauticsCalibrated {
 
                     return null;
                 });
+
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.GENERATOR.get(),
+                (generator, side) -> {
+                    if (side == null) return generator.getEnergyStorage();
+
+                    Direction facing = generator.getBlockState().getValue(GeneratorBlock.FACING);
+                    if (side.getAxis() != facing.getAxis()) {
+                        return generator.getEnergyStorage();
+                    }
+
+                    return null;
+                });
+
     }
     @SubscribeEvent
     public static void onModifyDefaultComponents(ModifyDefaultComponentsEvent event) {
