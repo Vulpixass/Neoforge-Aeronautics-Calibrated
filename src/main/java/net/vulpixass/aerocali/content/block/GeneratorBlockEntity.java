@@ -17,13 +17,14 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.vulpixass.aerocali.capabilities.AerocaliCapabilities;
+import net.vulpixass.aerocali.client.ClientAccess;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.sound.GeneratorSoundInstance;
 
 import java.util.List;
 
 public class GeneratorBlockEntity extends KineticBlockEntity {
-    private Object generatorSound;
+    public Object generatorSound;
     private final GeneratorEnergy energy = new GeneratorEnergy(5000, 500, 500);
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
@@ -42,7 +43,7 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
         super.tick();
         if (level == null) return;
         if (level.isClientSide) {
-            manageSound();
+            ClientAccess.manageSound(this);
         }
 
         if (level.isClientSide) return;
@@ -120,21 +121,6 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
 
     public IEnergyStorage getEnergyStorage() {
         return energy;
-    }
-
-    private void manageSound() {
-        float speed = Math.abs(getSpeed());
-
-        // Start sound if rotating and not already playing
-        if (speed > 0.01f && generatorSound == null) {
-            GeneratorSoundInstance sound = new GeneratorSoundInstance(this);
-            net.minecraft.client.Minecraft.getInstance().getSoundManager().play(sound);
-            generatorSound = sound;
-        }
-        // Clear reference if the sound stopped itself
-        else if (generatorSound instanceof GeneratorSoundInstance sound && sound.isStopped()) {
-            generatorSound = null;
-        }
     }
 
 

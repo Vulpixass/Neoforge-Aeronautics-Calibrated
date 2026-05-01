@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.vulpixass.aerocali.client.ClientAccess;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.compat.NavTarget;
 import net.vulpixass.aerocali.content.ui.NavInputScreen;
@@ -39,7 +40,7 @@ public class NavigationElementItem extends Item {
 
         if (level.isClientSide) {
             if (player.isShiftKeyDown()) {
-                Minecraft.getInstance().setScreen(new NavInputScreen(stack));
+                ClientAccess.openNavInputScreen(stack);
             }
             return InteractionResultHolder.sidedSuccess(stack, true);
         }
