@@ -4,10 +4,15 @@ import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 
 public class GeneratorBlock extends DirectionalKineticBlock implements IBE<GeneratorBlockEntity> {
@@ -28,7 +33,7 @@ public class GeneratorBlock extends DirectionalKineticBlock implements IBE<Gener
 
     @Override
     public SpeedLevel getMinimumRequiredSpeedLevel() {
-        return SpeedLevel.MEDIUM;
+        return super.getMinimumRequiredSpeedLevel();
     }
 
 
@@ -45,5 +50,20 @@ public class GeneratorBlock extends DirectionalKineticBlock implements IBE<Gener
     @Override
     public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
         return new GeneratorBlockEntity(p_153215_, p_153216_);
+    }
+
+    @Override
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return Block.box(1, 1, 1, 15, 15, 15);
+    }
+
+    @Override
+    protected boolean useShapeForLightOcclusion(BlockState state) {
+        return false;
     }
 }

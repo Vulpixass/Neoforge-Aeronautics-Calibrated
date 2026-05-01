@@ -21,14 +21,10 @@ public class GeneratorVisual extends KineticBlockEntityVisual<GeneratorBlockEnti
     public GeneratorVisual(VisualizationContext context, GeneratorBlockEntity blockEntity, float partialTick) {
         super(context, blockEntity, partialTick);
 
-        // 1. Grab the axis from your block
         Direction.Axis axis = blockState.getValue(GeneratorBlock.FACING).getAxis();
 
-        // 2. Create the shaft instance
         Instancer<RotatingInstance> instancer = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFT));
         shaft = instancer.createInstance();
-
-        // 3. Position and rotate it
         shaft.setup(blockEntity, axis, blockEntity.getSpeed())
                 .setPosition(getVisualPosition())
                 .setChanged();
@@ -36,7 +32,6 @@ public class GeneratorVisual extends KineticBlockEntityVisual<GeneratorBlockEnti
 
     @Override
     public void update(float pt) {
-        // This keeps the shaft speed in sync if the machine speeds up/slows down
         Direction.Axis axis = blockState.getValue(GeneratorBlock.FACING).getAxis();
         shaft.setup(blockEntity, axis, blockEntity.getSpeed()).setChanged();
     }

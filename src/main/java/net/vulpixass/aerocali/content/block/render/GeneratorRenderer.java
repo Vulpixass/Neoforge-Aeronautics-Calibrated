@@ -3,7 +3,8 @@ package net.vulpixass.aerocali.content.block.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -27,23 +28,34 @@ public class GeneratorRenderer extends KineticBlockEntityRenderer<GeneratorBlock
 
         SuperByteBuffer shaft = CachedBuffers.partial(AllPartialModels.SHAFT, state);
 
-        // 1. Get the spin angle
-        float angle = getAngleForBe(be, be.getBlockPos(), axis);
+        float speed = be.getSpeed();
+        float time = AnimationTickHolder.getRenderTime(be.getLevel());
+        float angle = (time * speed * 3f / 10f) % 360;
+        float offset = getRotationOffsetForPosition(be, be.getBlockPos(), axis);
+        float finalAngle = angle + offset;
 
-        shaft.center()
-                // 2. Spin it while it's standing up (Y-axis)
-                .rotateZ(angle)
+        shaft.center();
 
-                // 3. TIP IT DOWN (The 90-degree flip you mentioned!)
-                // This lays it down so it's pointing North/South
-                .rotateXDegrees(90)
+        if (axis == Direction.Axis.X) {
+            shaft.rotateZDegrees(-90);
+            shaft.rotateYDegrees(finalAngle);
+        }
+        else if (axis == Direction.Axis.Z) {
+            shaft.rotateXDegrees(90);
+            shaft.rotateYDegrees(finalAngle);
+        }
+        else {
+            shaft.rotateYDegrees(finalAngle);
+        }
 
-                // 4. Align with the block's actual facing (handle East/West/Up/Down)
-                // Since we tipped it to North/South, this will now rotate it correctly to the sides
-                .rotateToFace(facing)
+        shaft.uncenter();
+        shaft.light(light).renderInto(ms, buffer.getBuffer(RenderType.cutout()));
+    }
 
-                .uncenter();
-
-        shaft.light(light).renderInto(ms, buffer.getBuffer(RenderType.solid()));
+    @Override
+    protected SuperByteBuffer getRotatedModel(GeneratorBlockEntity be, BlockState state) {
+        Direction.Axis axis = state.getValue(GeneratorBlock.FACING).getAxis();
+        return CachedBuffers.partialFacing(AllPartialModels.SHAFT, state,
+                Direction.get(Direction.AxisDirection.POSITIVE, axis));
     }
 }

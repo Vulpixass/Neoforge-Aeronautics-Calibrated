@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "C": {
-      "tag": "minecraft:compass"
+      "item": "minecraft:compass"
     },
     "I": {
-      "item": "create:inudstrial_iron_block"
+      "item": "create:industrial_iron_block"
     }
   },
   "pattern": [
@@ -16,6 +16,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "aerocali:navigation_element.json"
+    "id": "aerocali:navigation_element"
   }
 }

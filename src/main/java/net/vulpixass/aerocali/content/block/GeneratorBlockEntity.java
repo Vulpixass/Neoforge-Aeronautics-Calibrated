@@ -5,8 +5,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -14,12 +18,12 @@ import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.vulpixass.aerocali.capabilities.AerocaliCapabilities;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
+import net.vulpixass.aerocali.content.sound.GeneratorSoundInstance;
 
 import java.util.List;
 
 public class GeneratorBlockEntity extends KineticBlockEntity {
-
-    // Using your custom inner class logic
+    private Object generatorSound;
     private final GeneratorEnergy energy = new GeneratorEnergy(5000, 500, 500);
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
@@ -29,7 +33,6 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
     @Override
     public void onSpeedChanged(float previousSpeed) {
         super.onSpeedChanged(previousSpeed);
-        // This forces the block to re-evaluate its state when the gear starts turning
         setChanged();
     }
 
@@ -37,7 +40,12 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level == null || level.isClientSide) return;
+        if (level == null) return;
+        if (level.isClientSide) {
+            manageSound();
+        }
+
+        if (level.isClientSide) return;
 
         if (level.getGameTime() % 4 == 0) {
             float speed = Math.abs(getSpeed());
@@ -46,6 +54,8 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
 
                 energy.receiveEnergy(generated, false);
                 setChanged();
+                sendData();
+
 
                 //System.out.println("Generated: " + generated + " FE (4-tick cycle)");
             }
@@ -53,6 +63,7 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
 
         if (energy.getEnergyStored() > 0) {
             distributeEnergy();
+            sendData();
         }
     }
 
@@ -110,6 +121,22 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
     public IEnergyStorage getEnergyStorage() {
         return energy;
     }
+
+    private void manageSound() {
+        float speed = Math.abs(getSpeed());
+
+        // Start sound if rotating and not already playing
+        if (speed > 0.01f && generatorSound == null) {
+            GeneratorSoundInstance sound = new GeneratorSoundInstance(this);
+            net.minecraft.client.Minecraft.getInstance().getSoundManager().play(sound);
+            generatorSound = sound;
+        }
+        // Clear reference if the sound stopped itself
+        else if (generatorSound instanceof GeneratorSoundInstance sound && sound.isStopped()) {
+            generatorSound = null;
+        }
+    }
+
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
