@@ -4,8 +4,11 @@ import dev.eriksonn.aeronautics.Aeronautics;
 import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.content.blocks.nav_table.navigation_target.NavigationTarget;
 import dev.simulated_team.simulated.index.SimDataComponents;
+import dev.simulated_team.simulated.index.SimRegistries;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -13,10 +16,12 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import net.vulpixass.aerocali.capabilities.AerocaliCapabilities;
 import net.vulpixass.aerocali.compat.NavElementRegistry;
 import net.vulpixass.aerocali.compat.NavTarget;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
+import net.vulpixass.aerocali.content.AerocaliTabs;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
 import net.vulpixass.aerocali.content.block.GeneratorBlock;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
@@ -26,6 +31,8 @@ import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
+import net.vulpixass.aerocali.network.NavUpdatePayload;
+import net.vulpixass.aerocali.network.ServerPayloadHandler;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -50,6 +57,7 @@ import static net.vulpixass.aerocali.data.AerocaliDataComponents.NAV_TARGET_DATA
 public class AeronauticsCalibrated {
     public static final String MOD_ID = "aerocali";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static NavigationTarget AEROCALI_NAV_BRIDGE;
 
     /*
 
@@ -79,10 +87,13 @@ public class AeronauticsCalibrated {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(this::onRegister);
+        modEventBus.addListener(this::register);
         AerocaliDataComponents.DATA_COMPONENTS.register(modEventBus);
 
         AerocaliBlocks.BLOCKS.register(modEventBus);
         AerocaliItems.ITEMS.register(modEventBus);
+        AerocaliTabs.AEROCALI_TABS.register(modEventBus);
 
         AerocaliBlockEntities.BLOCK_ENTITIES.register(modEventBus);
 
@@ -90,7 +101,6 @@ public class AeronauticsCalibrated {
         AerocaliSounds.SOUNDS.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
-
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -111,6 +121,7 @@ public class AeronauticsCalibrated {
         }
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(AerocaliItems.ION_UPGRADE);
+            event.accept(AerocaliItems.NAVIGATION_ELEMENT);
         }
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(AerocaliItems.THERMAL_MECHANISM);
@@ -159,8 +170,22 @@ public class AeronauticsCalibrated {
     }
     @SubscribeEvent
     public static void onModifyDefaultComponents(ModifyDefaultComponentsEvent event) {
-        event.modify(AerocaliItems.NAVIGATION_ELEMENT.get(), builder ->
-                builder.set(SimDataComponents.TARGET, new NavTarget())
-        );
+        event.modify(AerocaliItems.NAVIGATION_ELEMENT.get(), (builder) -> builder.set(SimDataComponents.TARGET, new NavTarget()));
+    }
+
+    @SubscribeEvent
+    public void register(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar("aerocali").versioned("1.0");
+        registrar.playToServer(NavUpdatePayload.TYPE, NavUpdatePayload.STREAM_CODEC, ServerPayloadHandler::handleNavUpdate);
+    }
+
+    @SubscribeEvent
+    public void onRegister(RegisterEvent event) {
+        if (event.getRegistryKey().equals(SimRegistries.Keys.NAVIGATION_TARGET)) {
+            AEROCALI_NAV_BRIDGE = new NavTarget();
+            event.register(SimRegistries.Keys.NAVIGATION_TARGET, ResourceLocation.fromNamespaceAndPath("aerocali", "target"),
+                    () -> AEROCALI_NAV_BRIDGE);
+            System.out.println("DEBUG: Registered Aerocali Navigation Bridge!");
+        }
     }
 }

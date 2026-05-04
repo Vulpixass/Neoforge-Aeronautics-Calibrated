@@ -6,5 +6,7 @@
   "item.aerocali.thermal_mechanism": "Thermal Mechanism",
   "item.aerocali.incomplete_thermal_mechanism": "Incomplete Thermal Mechanism",
 
-  "item.aerocali.navigation_element": "Navigation Compass"
+  "item.aerocali.navigation_element": "Navigation Compass",
+
+  "itemGroup.aerocali_tab": "Aeronautics: Calibrated"
 }
