@@ -1,12 +1,19 @@
 {
   "block.aerocali.thruster": "Thruster",
   "block.aerocali.generator": "Generator",
+  "block.aerocali.tracker": "Navigation Tracker",
 
   "item.aerocali.ion_upgrade": "Ion Thruster Upgrade",
   "item.aerocali.thermal_mechanism": "Thermal Mechanism",
+  "item.aerocali.ionized_thermal_mechanism": "Ionized Thermal Mechanism",
   "item.aerocali.incomplete_thermal_mechanism": "Incomplete Thermal Mechanism",
 
   "item.aerocali.navigation_element": "Navigation Compass",
+  "item.aerocali.traverse_board": "Traverse Board",
 
-  "itemGroup.aerocali_tab": "Aeronautics: Calibrated"
+  "itemGroup.aerocali_tab": "Aeronautics: Calibrated",
+
+  "tooltip.aerocali.navigation_tracker.placement": "§6A Tracker that outputs a redstone Signal as soon as it is near the inputted Location. Requires a Navigation Table below it and a shaft above it",
+  "tooltip.aerocali.traverse_board.usage": "§6Right Click this Item to save your current coordinates to it for later usage"
+
 }

@@ -7,6 +7,9 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlock;
+import net.vulpixass.aerocali.content.block.custom.nav_tracker.NavigationTrackerBlock;
 
 import static net.vulpixass.aerocali.content.item.AerocaliItems.ITEMS;
 
@@ -25,5 +28,11 @@ public class AerocaliBlocks {
                     () -> new GeneratorBlock(Block.Properties.of().strength(2f)));
     public static final DeferredItem<BlockItem> GENERATOR_ITEM = ITEMS.register("generator",
             () -> new BlockItem(AerocaliBlocks.GENERATOR.get(), new Item.Properties()));
+
+    public static final DeferredHolder<Block, NavigationTrackerBlock> TRACKER =
+            BLOCKS.register("tracker",
+                    () -> new NavigationTrackerBlock(Block.Properties.of().strength(2f)));
+    public static final DeferredItem<BlockItem> TRACKER_ITEM = ITEMS.register("tracker",
+            () -> new BlockItem(AerocaliBlocks.TRACKER.get(), new Item.Properties()));
 
 }

@@ -1,0 +1,41 @@
+{
+  "parent": "aerocali:block/tracker_item",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [70, 45, 0],
+      "translation": [0, 1, 1],
+      "scale": [0.35, 0.35, 0.35]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [70, 45, 0],
+      "translation": [0, 1, 1],
+      "scale": [0.35, 0.35, 0.35]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 45, 0],
+      "translation": [0, 1, 0],
+      "scale": [0.45, 0.45, 0.45]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 45, 0],
+      "translation": [0, 1, 0],
+      "scale": [0.45, 0.45, 0.45]
+    },
+    "ground": {
+      "translation": [0, 3.5, 0],
+      "scale": [0.34, 0.34, 0.34]
+    },
+    "gui": {
+      "rotation": [37.5, 45, 0],
+      "translation": [0, 0.0, 0],
+      "scale": [0.38, 0.38, 0.38]
+    },
+    "head": {
+      "translation": [0, 14.25, 0]
+    },
+    "fixed": {
+      "translation": [0, 2, 0],
+      "scale": [0.5, 0.5, 0.5]
+    }
+  }
+}

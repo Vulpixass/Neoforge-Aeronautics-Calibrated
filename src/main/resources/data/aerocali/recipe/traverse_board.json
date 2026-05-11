@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "create:sand_paper"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    }
+  },
+  "pattern": [
+    " B ",
+    "BPB",
+    " B "
+  ],
+  "result": {
+    "count": 1,
+    "id": "aerocali:traverse_board"
+  }
+}

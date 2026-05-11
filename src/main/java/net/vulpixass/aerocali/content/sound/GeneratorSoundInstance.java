@@ -3,7 +3,7 @@ package net.vulpixass.aerocali.content.sound;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.vulpixass.aerocali.content.block.GeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlockEntity;
 
 public class GeneratorSoundInstance extends AbstractTickableSoundInstance {
     private final GeneratorBlockEntity blockEntity;

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "aerocali:item/ion_upgrade"
+    "layer0": "aerocali:item/traverse_board_written"
   }
 }

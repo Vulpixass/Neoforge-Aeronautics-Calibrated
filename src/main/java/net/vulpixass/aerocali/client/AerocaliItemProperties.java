@@ -13,11 +13,10 @@ import net.vulpixass.aerocali.data.AerocaliDataComponents;
 import java.util.Objects;
 
 public class AerocaliItemProperties {
-    private static float res = 0;
 
     public static void register() {
-        ItemProperties.register(AerocaliItems.NAVIGATION_ELEMENT.get(),
-                Objects.requireNonNull(ResourceLocation.tryBuild(AeronauticsCalibrated.MOD_ID, "nav_angle")), AerocaliItemProperties::computeAngle);
+        ItemProperties.register(AerocaliItems.NAVIGATION_ELEMENT.get(), Objects.requireNonNull(ResourceLocation.
+                        tryBuild(AeronauticsCalibrated.MOD_ID, "nav_angle")), AerocaliItemProperties::computeAngle);
     }
 
     private static float computeAngle(ItemStack stack, Level level, LivingEntity entity, int seed) {

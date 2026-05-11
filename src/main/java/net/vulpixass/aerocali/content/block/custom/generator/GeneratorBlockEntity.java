@@ -1,25 +1,18 @@
-package net.vulpixass.aerocali.content.block;
+package net.vulpixass.aerocali.content.block.custom.generator;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.vulpixass.aerocali.capabilities.AerocaliCapabilities;
 import net.vulpixass.aerocali.client.ClientAccess;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
-import net.vulpixass.aerocali.content.sound.GeneratorSoundInstance;
 
 import java.util.List;
 

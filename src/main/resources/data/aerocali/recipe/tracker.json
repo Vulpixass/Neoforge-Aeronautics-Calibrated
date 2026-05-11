@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "W": {
+      "item": "create:cogwheel"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "C": {
+      "item": "create:chute"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "pattern": [
+    " W ",
+    "RMR",
+    "BCB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "aerocali:tracker"
+  }
+}

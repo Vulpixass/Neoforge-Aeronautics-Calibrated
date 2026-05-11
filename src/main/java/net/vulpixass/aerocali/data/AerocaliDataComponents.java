@@ -17,6 +17,10 @@ public class AerocaliDataComponents {
             .register("nav_target", () -> DataComponentType.<NavTargetData>builder().persistent(NavTargetData.CODEC)
                     .networkSynchronized(NavTargetData.STREAM_CODEC).build());
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<NavTargetData>> SAVED_COORDINATES = DATA_COMPONENTS
+            .register("saved_coordinates", () -> DataComponentType.<NavTargetData>builder().persistent(NavTargetData.CODEC)
+                    .networkSynchronized(NavTargetData.STREAM_CODEC).build());
+
     public static NavDataStorage<NavTargetData> NAV_TARGET_DATA;
 
 }

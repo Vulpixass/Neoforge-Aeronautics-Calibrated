@@ -1,4 +1,4 @@
-package net.vulpixass.aerocali.content.block;
+package net.vulpixass.aerocali.content.block.custom.generator;
 
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;

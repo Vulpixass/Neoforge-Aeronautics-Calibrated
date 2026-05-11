@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "aerocali:item/ion_upgrade"
+    "model": "aerocali:block/tracker_item"
   }
 }

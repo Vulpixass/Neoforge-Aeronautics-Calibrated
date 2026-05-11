@@ -1,16 +1,11 @@
 package net.vulpixass.aerocali;
 
-import dev.eriksonn.aeronautics.Aeronautics;
-import dev.simulated_team.simulated.Simulated;
 import dev.simulated_team.simulated.content.blocks.nav_table.navigation_target.NavigationTarget;
 import dev.simulated_team.simulated.index.SimDataComponents;
 import dev.simulated_team.simulated.index.SimRegistries;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ItemLike;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
@@ -23,12 +18,13 @@ import net.vulpixass.aerocali.compat.NavTarget;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.AerocaliTabs;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
-import net.vulpixass.aerocali.content.block.GeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlock;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
-import net.vulpixass.aerocali.content.item.custom.NavigationElementItem;
 import net.vulpixass.aerocali.content.item.data.NavDataStorage;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
+import net.vulpixass.aerocali.content.model.PartialModels;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
+import net.vulpixass.aerocali.content.recipe.AerocaliRecipes;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
 import net.vulpixass.aerocali.network.NavUpdatePayload;
@@ -96,13 +92,14 @@ public class AeronauticsCalibrated {
         AerocaliTabs.AEROCALI_TABS.register(modEventBus);
 
         AerocaliBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        PartialModels.init();
+        AerocaliRecipes.register(modEventBus);
 
         AerocaliParticles.register(modEventBus);
         AerocaliSounds.SOUNDS.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
@@ -113,6 +110,7 @@ public class AeronauticsCalibrated {
                     () -> new NavTargetData(0, 0, 0, "minecraft:overworld"),
                     Function.identity());
         });
+
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -120,11 +118,12 @@ public class AeronauticsCalibrated {
             event.accept(AerocaliBlocks.THRUSTER_ITEM);
         }
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(AerocaliItems.ION_UPGRADE);
+            event.accept(AerocaliItems.IONIZED_THERMAL_MECHANISM);
             event.accept(AerocaliItems.NAVIGATION_ELEMENT);
         }
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(AerocaliItems.THERMAL_MECHANISM);
+            event.accept(AerocaliItems.IONIZED_THERMAL_MECHANISM);
         }
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(AerocaliBlocks.THRUSTER_ITEM);
@@ -166,7 +165,8 @@ public class AeronauticsCalibrated {
 
                     return null;
                 });
-
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, AerocaliBlockEntities.TRACKER.get(),
+                (be, side) -> be.getInventory());
     }
     @SubscribeEvent
     public static void onModifyDefaultComponents(ModifyDefaultComponentsEvent event) {

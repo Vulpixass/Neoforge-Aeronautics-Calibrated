@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -26,7 +27,7 @@ public class NavInputScreen extends Screen {
     private EditBox zField;
 
     public NavInputScreen(ItemStack stack) {
-        super(Component.literal("Navigation Target"));
+        super(Component.literal("Navigation Screen"));
         this.stack = stack;
     }
 
@@ -36,6 +37,7 @@ public class NavInputScreen extends Screen {
         int centerY = this.height / 2;
         this.xField = new EditBox(this.font, centerX - 40, centerY - 20, 80, 16, Component.literal("X"));
         this.zField = new EditBox(this.font, centerX - 40, centerY + 2, 80, 16, Component.literal("Z"));
+
         this.addRenderableWidget(this.xField);
         this.addRenderableWidget(this.zField);
         this.addRenderableWidget(Button.builder(Component.literal("Confirm"), (btn) -> {
@@ -44,7 +46,7 @@ public class NavInputScreen extends Screen {
                 int y = 0;
                 int z = Integer.parseInt(this.zField.getValue());
                 this.stack.set(AerocaliDataComponents.NAV_TARGET.get(), new NavTargetData(x, y, z, this.minecraft.level.dimension().location().toString()));
-                PacketDistributor.sendToServer(new NavUpdatePayload(x, y, z), new CustomPacketPayload[0]);
+                PacketDistributor.sendToServer(new NavUpdatePayload(x, y, z));
                 this.onClose();
             } catch (NumberFormatException var5) {
                 this.invalidCoords = true;

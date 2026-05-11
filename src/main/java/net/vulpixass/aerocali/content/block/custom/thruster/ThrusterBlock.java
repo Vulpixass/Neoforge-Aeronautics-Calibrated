@@ -1,4 +1,4 @@
-package net.vulpixass.aerocali.content.block;
+package net.vulpixass.aerocali.content.block.custom.thruster;
 
 import dev.eriksonn.aeronautics.content.blocks.propeller.small.BasePropellerBlock;
 import dev.eriksonn.aeronautics.content.blocks.propeller.small.BasePropellerBlockEntity;
@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -43,6 +44,10 @@ public class ThrusterBlock extends BasePropellerBlock {
     @Override
     public BlockEntityType<? extends BasePropellerBlockEntity> getBlockEntityType() {
         return AerocaliBlockEntities.THRUSTER.get();
+    }
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
@@ -93,7 +98,7 @@ public class ThrusterBlock extends BasePropellerBlock {
         if (player.isShiftKeyDown() && stack.isEmpty() && state.getValue(ION_MODE)) {
             if (!level.isClientSide) {
                 level.setBlock(pos, state.setValue(ION_MODE, false), 3);
-                player.addItem(new ItemStack(AerocaliItems.ION_UPGRADE.get()));
+                player.addItem(new ItemStack(AerocaliItems.IONIZED_THERMAL_MECHANISM.get()));
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }

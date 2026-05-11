@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_mechanism": {
+    "has_casing": {
       "conditions": {
         "items": [
           {
-            "items": "aerocali:thermal_mechanism"
+            "items": "create:brass_casing"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "aerocali:thruster"
+        "recipe": "aerocali:traverse_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_mechanism"
+      "has_casing"
     ]
   ],
   "rewards": {
     "recipes": [
-      "aerocali:mechanical_crafting/thruster"
+      "aerocali:traverse_board"
     ]
   }
 }

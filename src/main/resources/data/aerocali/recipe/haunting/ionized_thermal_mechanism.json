@@ -1,0 +1,13 @@
+{
+  "type": "create:haunting",
+  "ingredients": [
+    {
+      "item": "aerocali:thermal_mechanism"
+    }
+  ],
+  "results": [
+    {
+      "id": "aerocali:ionized_thermal_mechanism"
+    }
+  ]
+}

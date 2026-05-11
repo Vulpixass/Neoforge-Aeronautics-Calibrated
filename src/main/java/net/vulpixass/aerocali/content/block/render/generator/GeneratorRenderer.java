@@ -1,10 +1,9 @@
-package net.vulpixass.aerocali.content.block.render;
+package net.vulpixass.aerocali.content.block.render.generator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import net.createmod.catnip.animation.AnimationTickHolder;
-import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,8 +11,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.vulpixass.aerocali.content.block.GeneratorBlock;
-import net.vulpixass.aerocali.content.block.GeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlockEntity;
 
 public class GeneratorRenderer extends KineticBlockEntityRenderer<GeneratorBlockEntity> {
     public GeneratorRenderer(BlockEntityRendererProvider.Context context) {

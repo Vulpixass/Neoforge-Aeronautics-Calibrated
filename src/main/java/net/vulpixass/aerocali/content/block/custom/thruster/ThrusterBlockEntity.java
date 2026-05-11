@@ -1,4 +1,4 @@
-package net.vulpixass.aerocali.content.block;
+package net.vulpixass.aerocali.content.block.custom.thruster;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import dev.eriksonn.aeronautics.content.blocks.propeller.small.BasePropellerBlock;
