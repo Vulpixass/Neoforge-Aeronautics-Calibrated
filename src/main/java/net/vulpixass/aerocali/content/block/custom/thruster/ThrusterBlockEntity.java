@@ -37,11 +37,11 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
 
     private int soundCooldown = 0;
     private boolean active = false;
-    private float thrust = 0;
+    public float thrust = 0;
     private float airflow = 0;
     private int startupTicks = 0;
     private int stallTicks = 0;
-    boolean ion = getBlockState().getValue(ThrusterBlock.ION_MODE);
+    public boolean ion = getBlockState().getValue(ThrusterBlock.ION_MODE);
 
     public IEnergyStorage getEnergyStorage() {return energy;}
 
@@ -213,7 +213,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         }
     }
 
-    private void spawnFlameParticles() {
+    public void spawnFlameParticles() {
         if (level == null || !level.isClientSide) return;
 
         Direction out = getBlockDirection();

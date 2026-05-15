@@ -13,7 +13,29 @@
 
   "itemGroup.aerocali_tab": "Aeronautics: Calibrated",
 
-  "tooltip.aerocali.navigation_tracker.placement": "§6A Tracker that outputs a redstone Signal as soon as it is near the inputted Location. Requires a Navigation Table below it and a shaft above it",
-  "tooltip.aerocali.traverse_board.usage": "§6Right Click this Item to save your current coordinates to it for later usage"
+  "tooltip.aerocali.traverse_board.usage": "§6Right Click this Item to save your current coordinates to it for later usage",
 
+  "aerocali.ponder.thruster_functionality.header": "How the Thruster works",
+  "aerocali.ponder.generator_functionality.header": "How the Generator works",
+  "aerocali.ponder.tracker_functionality.header": "How the Navigation Tracker works",
+  "aerocali.ponder.thruster_upgrading.header": "How to upgrade the Thruster",
+
+  "aerocali.ponder.thruster_functionality.text_1": "This is the main Thruster unit.",
+  "aerocali.ponder.thruster_functionality.text_2": "By Powering it using a generator it gains FE.",
+  "aerocali.ponder.thruster_functionality.text_3": "When getting a redstone signal inputted...",
+  "aerocali.ponder.thruster_functionality.text_4": "The Thruster turns on!",
+
+  "aerocali.ponder.thruster_upgrading.text_1": "Normally the Thruster outputs fire particles with an okay amount of thrust and power consumption.",
+  "aerocali.ponder.thruster_upgrading.text_2": "By right clicking on it with an Ionized Thermal Mechanism...",
+  "aerocali.ponder.thruster_upgrading.text_3": "The Particles will become soul fire particles and the Thruster will require twice as much thrust and power consumption than normally.",
+
+  "aerocali.ponder.generator_functionality.text_1": "This is the Generator.",
+  "aerocali.ponder.generator_functionality.text_2": "When Powered by RPM it will generate FE",
+  "aerocali.ponder.generator_functionality.text_3": "When the RPM is faster, the Generator will generate more FE/tick with a cap of 15 FE/tick",
+
+  "aerocali.ponder.tracker_functionality.text_1": "This is the Navigation Tracker.",
+  "aerocali.ponder.tracker_functionality.text_2": "It requires a shaft above with an RPM speed of at least 30",
+  "aerocali.ponder.tracker_functionality.text_3": "And a Navigation Table below to function.",
+  "aerocali.ponder.tracker_functionality.text_4": "When a Navigation Compass is inputted, the Tracker will output a redstone signal depending on how far away it is from the target.",
+  "aerocali.ponder.tracker_functionality.text_5": "The Tracker will also pass the compass immediately to the Navigation Table below."
 }

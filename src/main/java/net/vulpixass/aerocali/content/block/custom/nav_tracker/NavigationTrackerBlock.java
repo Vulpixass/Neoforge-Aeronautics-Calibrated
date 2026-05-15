@@ -149,14 +149,4 @@ public class NavigationTrackerBlock extends DirectionalKineticBlock implements I
 
         return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
     }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.aerocali.navigation_tracker.placement")
-                .withStyle(ChatFormatting.GOLD));
-        super.appendHoverText(stack, context, tooltip, flag);
-    }
-
-
-
 }

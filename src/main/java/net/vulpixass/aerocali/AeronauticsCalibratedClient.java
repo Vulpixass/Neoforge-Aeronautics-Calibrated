@@ -1,5 +1,10 @@
 package net.vulpixass.aerocali;
 
+import net.createmod.ponder.api.registration.MultiSceneBuilder;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.registration.StoryBoardEntry;
+import net.createmod.ponder.api.scene.PonderStoryBoard;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -25,12 +30,18 @@ import net.vulpixass.aerocali.content.item.AerocaliItems;
 import net.vulpixass.aerocali.content.item.render.nav_tracker.NavigationTrackerItemRenderer;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
 import net.vulpixass.aerocali.content.particle.ThrustParticles;
+import net.vulpixass.aerocali.content.ponder.AerocaliPonderPlugin;
+import net.vulpixass.aerocali.content.ponder.PonderScenes;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
 
+import java.util.function.Function;
+
+import static net.vulpixass.aerocali.AeronauticsCalibrated.MOD_ID;
+
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
-@Mod(value = AeronauticsCalibrated.MOD_ID, dist = Dist.CLIENT)
+@Mod(value = MOD_ID, dist = Dist.CLIENT)
 // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-@EventBusSubscriber(modid = AeronauticsCalibrated.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class AeronauticsCalibratedClient {
     public AeronauticsCalibratedClient(ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
@@ -38,6 +49,7 @@ public class AeronauticsCalibratedClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
+        PonderIndex.addPlugin(new AerocaliPonderPlugin());
         AerocaliItemProperties.register();
         BlockEntityRenderers.register(AerocaliBlockEntities.GENERATOR.get(), GeneratorRenderer::new);
         BlockEntityRenderers.register(AerocaliBlockEntities.TRACKER.get(), NavigationTrackerRenderer::new);
@@ -65,4 +77,6 @@ public class AeronauticsCalibratedClient {
             }
         }, AerocaliBlocks.TRACKER_ITEM.get());
     }
+
+
 }
