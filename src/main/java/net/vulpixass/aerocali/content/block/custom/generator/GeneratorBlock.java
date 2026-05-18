@@ -16,7 +16,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 
 public class GeneratorBlock extends DirectionalKineticBlock implements IBE<GeneratorBlockEntity> {
-
     public GeneratorBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
@@ -48,8 +47,8 @@ public class GeneratorBlock extends DirectionalKineticBlock implements IBE<Gener
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
-        return new GeneratorBlockEntity(p_153215_, p_153216_);
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new GeneratorBlockEntity(blockPos, blockState);
     }
 
     @Override

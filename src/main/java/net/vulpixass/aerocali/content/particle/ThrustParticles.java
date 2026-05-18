@@ -6,6 +6,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.Nullable;
 
 public class ThrustParticles extends TextureSheetParticle {
+    // Defines the custom (unused) regular Thruster Particles
     protected ThrustParticles(ClientLevel level, double x, double y, double z, SpriteSet spriteSet, double xSpeed, double ySpeed, double zSpeed) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed);
 

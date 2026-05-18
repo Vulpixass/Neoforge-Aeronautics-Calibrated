@@ -21,6 +21,7 @@ public class GeneratorRenderer extends KineticBlockEntityRenderer<GeneratorBlock
 
     @Override
     protected void renderSafe(GeneratorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+        // Renders the Generators Shaft
         BlockState state = be.getBlockState();
         Direction facing = state.getValue(GeneratorBlock.FACING);
         Direction.Axis axis = facing.getAxis();
@@ -35,6 +36,7 @@ public class GeneratorRenderer extends KineticBlockEntityRenderer<GeneratorBlock
 
         shaft.center();
 
+        // Modifies the Shafts rotation depending on the facing direction of the Generator
         if (axis == Direction.Axis.X) {
             shaft.rotateZDegrees(-90);
             shaft.rotateYDegrees(finalAngle);
@@ -51,6 +53,7 @@ public class GeneratorRenderer extends KineticBlockEntityRenderer<GeneratorBlock
         shaft.light(light).renderInto(ms, buffer.getBuffer(RenderType.cutout()));
     }
 
+    // Allow any rotation of the Model
     @Override
     protected SuperByteBuffer getRotatedModel(GeneratorBlockEntity be, BlockState state) {
         Direction.Axis axis = state.getValue(GeneratorBlock.FACING).getAxis();

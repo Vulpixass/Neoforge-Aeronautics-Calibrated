@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import static net.vulpixass.aerocali.AeronauticsCalibrated.MOD_ID;
 
 public class AerocaliRecipes{
+    // Registers/Defines the Custom Code written recipes
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, MOD_ID);
     public static final Supplier<RecipeSerializer<NavCompassRecipe>> NAV_COMPASS_SERIALIZER = SERIALIZERS.register("nav_compass_recipe",
             () -> new SimpleCraftingRecipeSerializer<>(NavCompassRecipe::new));

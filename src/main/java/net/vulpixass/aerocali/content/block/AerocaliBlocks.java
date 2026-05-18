@@ -14,6 +14,7 @@ import net.vulpixass.aerocali.content.block.custom.nav_tracker.NavigationTracker
 import static net.vulpixass.aerocali.content.item.AerocaliItems.ITEMS;
 
 public class AerocaliBlocks {
+    // Register/Define the Blocks and their according Items
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(Registries.BLOCK, "aerocali");
 

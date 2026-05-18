@@ -114,25 +114,27 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
             stallTicks--;
             thrust = 0;
             airflow = 0;
-            rotationSpeed = 0;
+            rotationSpeed = 0; // Okay don't ask why this is here... I extend from the Propeller of Aeronautics so this just comes with it...
             active = false;
 
             if (!level.isClientSide) {
                 BlockState state = getBlockState();
-                if (state.getValue(ThrusterBlock.POWERED) != false) {level.setBlock(worldPosition, state
-                        .setValue(ThrusterBlock.POWERED, false), 3);}
+                if (state.getValue(ThrusterBlock.POWERED)) level.setBlock(worldPosition, state.setValue(ThrusterBlock.POWERED, false), 3);
                 setChanged();
                 sendData();
             }
             return;
         }
 
+
         if (!level.isClientSide) {
             BlockState state = getBlockState();
+            // Set Thruster to Powered/Unpowered
             if (state.getValue(ThrusterBlock.POWERED) != hasEnergy) {
                 level.setBlock(worldPosition, state.setValue(ThrusterBlock.POWERED, hasEnergy), 3);
             }
 
+            // Play Startup and burnout Sounds
             if (hasEnergy && canRun && !active) {
                 level.playSound(null, worldPosition, AerocaliSounds.THRUSTER_START.get(), SoundSource.BLOCKS, 0.25f, 0.5f);
                 startupTicks = 2;
@@ -141,6 +143,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
             }
         }
 
+        // sets Thrust of the Thruster
         if (canRun && hasEnergy && energy.extractEnergy(FEperTick, true) == FEperTick) {
             energy.extractEnergy(FEperTick, false);
             power = rs / 15f;
@@ -167,6 +170,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
             sendData();
         }
 
+        // Damage Players and spawn Fire
         if (!level.isClientSide && thrust > 0) {
 
             Direction out = getBlockDirection();
@@ -198,10 +202,12 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
             }
         }
         if (thrust > 0) {
+            // makes the No Usage Cooldown of the Thruster work
             if (startupTicks > 0) {
                 startupTicks--;
                 return;
             }
+            // Play the Thrusters Sound
             if (soundCooldown <= 0) {
                 if (ion) {level.playSound(null, worldPosition, AerocaliSounds.THRUSTER_ION.get(), SoundSource.BLOCKS
                             , 0.0625f, 1f);
@@ -213,6 +219,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         }
     }
 
+    // Spawn the Particles of the Thruster
     public void spawnFlameParticles() {
         if (level == null || !level.isClientSide) return;
 
@@ -274,6 +281,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         return 1.5f;
     }
 
+    // Saves important info about the Thruster
     @Override
     public void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
@@ -282,6 +290,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         tag.putInt("Energy", energy.getEnergyStored());
     }
 
+    // Lets the Thruster Read the saved info
     @Override
     public void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
@@ -303,6 +312,8 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
             this.energy = Math.min(capacity, Math.max(0, amount));
         }
     }
+
+    // adds the Goggle Tooltips... thats it...
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);

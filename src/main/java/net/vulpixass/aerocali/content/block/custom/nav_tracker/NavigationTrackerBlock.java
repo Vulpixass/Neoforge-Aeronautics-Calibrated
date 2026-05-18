@@ -133,12 +133,12 @@ public class NavigationTrackerBlock extends DirectionalKineticBlock implements I
         return be instanceof NavTableBlockEntity;
     }
 
+    // Destroys all Blocks above itself that are NOT a shaft
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
         if (!state.canSurvive(level, currentPos)) {
             return Blocks.AIR.defaultBlockState();
         }
-
         if (direction == Direction.UP && !neighborState.isAir()) {
             if (!(neighborState.getBlock() instanceof ShaftBlock)) {
                 if (level instanceof Level world && !world.isClientSide) {

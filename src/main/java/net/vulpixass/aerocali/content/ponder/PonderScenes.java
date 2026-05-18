@@ -37,6 +37,7 @@ public class PonderScenes {
 
     }
 
+    // Tracker Functionality Scene
     public static void trackerFunctionality(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
@@ -67,6 +68,8 @@ public class PonderScenes {
         scene.idle(50);
         scene.overlay().showControls(trackerVector3, Pointing.DOWN, 10).rightClick().withItem(AerocaliItems.NAVIGATION_ELEMENT.toStack());
         scene.idle(4);
+
+        // changes Active state of Ponder Blocks
         scene.world().modifyBlock(trackerWirePos, state -> {
             if (state.hasProperty(RedStoneWireBlock.POWER)) {
                 return state.setValue(RedStoneWireBlock.POWER, 7);
@@ -99,6 +102,7 @@ public class PonderScenes {
 
     }
 
+    // Generator Functionality Scene
     public static void generatorFunctionality(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
@@ -132,6 +136,7 @@ public class PonderScenes {
 
     }
 
+    // Thruster Upgrading Scene
     public static void thrusterUpgrading(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
@@ -150,6 +155,8 @@ public class PonderScenes {
 
         scene.overlay().showText(40).text("Normally the Thruster outputs fire particles with an okay amount of thrust and power consumption.")
                 .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(3, 2, 2), Direction.UP)).placeNearTarget();
+
+
         scene.world().modifyBlock(leverPos, state -> {
             if (state.hasProperty(LeverBlock.POWERED)) {
                 return state.setValue(LeverBlock.POWERED, true);
@@ -172,6 +179,7 @@ public class PonderScenes {
             return state;
         }, false);
 
+        // Spawns Particles of the Thruster
         for (int t = 0; t < 40; t++) {
             scene.world().modifyBlockEntity(thrusterPos, ThrusterBlockEntity.class, thruster -> {
                 thruster.thrust = 5.0f;
@@ -247,6 +255,7 @@ public class PonderScenes {
         scene.idle(30);
     }
 
+    // Thruster Functionality Scene
     public static void thrusterFunctionality(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
@@ -303,6 +312,7 @@ public class PonderScenes {
             return state;
         }, false);
 
+        // Spawns Particles of the Thruster
         for (int t = 0; t < 40; t++) {
             scene.world().modifyBlockEntity(thrusterPos, ThrusterBlockEntity.class, thruster -> {
                 thruster.thrust = 5.0f;

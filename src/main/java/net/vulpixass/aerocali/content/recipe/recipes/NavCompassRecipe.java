@@ -20,6 +20,7 @@ public class NavCompassRecipe extends CustomRecipe {
         super(category);
     }
 
+    // Tells the Recipe if the Ingredients match
     @Override
     public boolean matches(CraftingInput input, Level level) {
         List items = input.items();
@@ -36,6 +37,7 @@ public class NavCompassRecipe extends CustomRecipe {
         return compassCount == 1 && boardCount == 1;
     }
 
+    // Lets the Navigation Compass be crafted
     @Override
     public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
         ItemStack result = new ItemStack(AerocaliItems.NAVIGATION_ELEMENT.get());

@@ -8,6 +8,7 @@ import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlockEntit
 public class GeneratorSoundInstance extends AbstractTickableSoundInstance {
     private final GeneratorBlockEntity blockEntity;
 
+    // Define the Generator Sound (Yes it really is just bees)
     public GeneratorSoundInstance(GeneratorBlockEntity blockEntity) {
         super(SoundEvents.BEE_LOOP, SoundSource.BLOCKS, blockEntity.getLevel().random);
         this.blockEntity = blockEntity;
@@ -20,13 +21,13 @@ public class GeneratorSoundInstance extends AbstractTickableSoundInstance {
         this.pitch = 0.5f;
     }
 
+    // Manage the Generators Sound so that it stops as soon as the block is broken
     @Override
     public void tick() {
         if (blockEntity.isRemoved() || Math.abs(blockEntity.getSpeed()) < 0.01f) {
             this.stop();
             return;
         }
-
         this.pitch = 0.4f + (Math.abs(blockEntity.getSpeed()) / 512f);
     }
 }

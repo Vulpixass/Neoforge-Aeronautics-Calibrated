@@ -10,6 +10,7 @@ import net.vulpixass.aerocali.AeronauticsCalibrated;
 import java.util.function.Supplier;
 
 public class AerocaliParticles {
+    // Registers/Defines the unused custom particles
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
             DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, AeronauticsCalibrated.MOD_ID);
 

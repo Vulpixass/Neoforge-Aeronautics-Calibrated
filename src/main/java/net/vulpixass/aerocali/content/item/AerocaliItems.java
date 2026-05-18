@@ -10,10 +10,13 @@ import net.vulpixass.aerocali.content.item.custom.TraverseBoardItem;
 import static net.vulpixass.aerocali.AeronauticsCalibrated.MOD_ID;
 
 public class AerocaliItems {
+    // Register/Define Items
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
 
+    // Register Thermal Mechanism Items
     public static final DeferredItem<Item> THERMAL_MECHANISM = ITEMS.register("thermal_mechanism",
             () -> new Item(new Item.Properties()));
+    // Inbetween item for the sequenced assembly recipe
     public static final DeferredItem<Item> INCOMPLETE_THERMAL_MECHANISM = ITEMS
             .register("incomplete_thermal_mechanism", () -> new Item(new Item.Properties()));
 

@@ -35,12 +35,14 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
     public void tick() {
         super.tick();
         if (level == null) return;
+        // Play the sound
         if (level.isClientSide) {
             ClientAccess.manageSound(this);
         }
 
         if (level.isClientSide) return;
 
+        // Generate the FE/tick
         if (level.getGameTime() % 4 == 0) {
             float speed = Math.abs(getSpeed());
             if (speed > 0) {
@@ -49,12 +51,10 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
                 energy.receiveEnergy(generated, false);
                 setChanged();
                 sendData();
-
-
-                //System.out.println("Generated: " + generated + " FE (4-tick cycle)");
             }
         }
 
+        // Distribute the FE
         if (energy.getEnergyStored() > 0) {
             distributeEnergy();
             sendData();
@@ -72,6 +72,7 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
             BlockPos targetPos = worldPosition.relative(side);
             IEnergyStorage targetStorage = level.getCapability(Capabilities.EnergyStorage.BLOCK, targetPos, side.getOpposite());
 
+            // Give energy to targets
             if (targetStorage != null && targetStorage.canReceive()) {
                 int toSend = energy.extractEnergy(1000, true);
                 int accepted = targetStorage.receiveEnergy(toSend, false);
@@ -81,12 +82,14 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
         }
     }
 
+    // Saves the Energy stored
     @Override
     public void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
         tag.putInt("Energy", energy.getEnergyStored());
     }
 
+    // Lets the saved Energy be read for use
     @Override
     public void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
@@ -116,7 +119,7 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
         return energy;
     }
 
-
+    // Just adds the Goggle Tooltips... nothing more
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);

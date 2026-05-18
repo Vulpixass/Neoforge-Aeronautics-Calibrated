@@ -20,7 +20,6 @@ import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
 
 public class NavigationTrackerBlockEntity extends KineticBlockEntity {
-    // Your "RAM" storage
     private int tick = 220;
     private NavTargetData cachedTarget;
     private int redstoneLevel = 0;
@@ -55,22 +54,23 @@ public class NavigationTrackerBlockEntity extends KineticBlockEntity {
         // Check if the inventory has a compass
         ItemStack compass = inventory.getStackInSlot(0);
         if (!compass.isEmpty()) {
-            // 2. Read the data
+            // Read the data
             NavTargetData data = compass.get(AerocaliDataComponents.NAV_TARGET.get());
             if (data != null) {
                 this.cachedTarget = data;
                 BlockEntity below = level.getBlockEntity(worldPosition.below());
                 if (below instanceof NavTableBlockEntity navTable) {
-                    ItemStack heldInTable = navTable.getHeldItem(); // Check their method name!
+                    ItemStack heldInTable = navTable.getHeldItem();
 
-                    // If the table is empty and we have a compass
+                    // Push the Navigation Compass to the Navigation Table if it is empty
                     if (heldInTable.isEmpty() && !inventory.getStackInSlot(0).isEmpty()) {
                         ItemStack toPush = inventory.extractItem(0, 1, false);
-                        navTable.setHeldItem(toPush); // Use the method that puts the item in the slot
+                        navTable.setHeldItem(toPush);
                     }
                 }
             }
         }
+        // Calculate the Outputted Redstone Signal
         if (this.cachedTarget != null) {
             Vec3 currentPos;
 
@@ -125,17 +125,17 @@ public class NavigationTrackerBlockEntity extends KineticBlockEntity {
         return level.getBlockState(above).getBlock() instanceof ShaftBlock;
     }
 
+    // Saves Position of the Target
     @Override
     protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(compound, registries, clientPacket);
         compound.put("Inventory", inventory.serializeNBT(registries));
         if (cachedTarget != null) {
-            compound.putDouble("TargetX", cachedTarget.x());
-            compound.putDouble("TargetY", cachedTarget.y());
-            compound.putDouble("TargetZ", cachedTarget.z());
+            compound.putDouble("TargetX", cachedTarget.x());compound.putDouble("TargetY", cachedTarget.y());compound.putDouble("TargetZ", cachedTarget.z());
         }
     }
 
+    // Lets the Saved Position of the Target be read and it's dimension
     @Override
     protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(compound, registries, clientPacket);
@@ -143,12 +143,8 @@ public class NavigationTrackerBlockEntity extends KineticBlockEntity {
             inventory.deserializeNBT(registries, compound.getCompound("Inventory"));
         }
         if (compound.contains("TargetX")) {
-            this.cachedTarget = new NavTargetData(
-                    compound.getInt("TargetX"),
-                    compound.getInt("TargetY"),
-                    compound.getInt("TargetZ"),
-                    compound.getString("Dimension")
-            );
+            this.cachedTarget = new NavTargetData(compound.getInt("TargetX"), compound.getInt("TargetY"), compound.getInt("TargetZ"),
+                    compound.getString("Dimension"));
         }
     }
 }

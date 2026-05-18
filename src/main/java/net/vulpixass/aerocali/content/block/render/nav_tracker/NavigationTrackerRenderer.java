@@ -20,9 +20,11 @@ public class NavigationTrackerRenderer extends KineticBlockEntityRenderer<Naviga
 
     @Override
     protected void renderSafe(NavigationTrackerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+        // Renders the Tracker's Cogwheel, Shaft and Wind Bowls
         BlockState state = be.getBlockState();
         SuperByteBuffer shaft = CachedBuffers.partial(AllPartialModels.SHAFT, state);
 
+        // Calculate the Offset and rotation axis of the Models
         float speed = be.getSpeed();
         float time = AnimationTickHolder.getRenderTime(be.getLevel());
         float angle = (time * speed * 3f / 10f) % 360;
@@ -40,13 +42,13 @@ public class NavigationTrackerRenderer extends KineticBlockEntityRenderer<Naviga
 
     }
 
+    // Helper method to render the rotating indendent Partial Models
     private void renderRotatingPart(NavigationTrackerBlockEntity be, PartialModel model, float angle, float yOffset, float scale, PoseStack ms, MultiBufferSource buffer, int light) {
         CachedBuffers.partial(model, be.getBlockState()).center().rotateYDegrees(angle).scale(scale, scale, scale).uncenter()
                 .translate(0, yOffset, 0).light(light).renderInto(ms, buffer.getBuffer(RenderType.cutout()));
     }
 
-
-
+    // Make sure the direction of the Model is always Vertical
     @Override
     protected SuperByteBuffer getRotatedModel(NavigationTrackerBlockEntity be, BlockState state) {
         return CachedBuffers.partialFacing(AllPartialModels.SHAFT, state,

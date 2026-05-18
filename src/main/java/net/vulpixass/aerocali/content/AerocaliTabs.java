@@ -10,9 +10,11 @@ import net.vulpixass.aerocali.content.block.AerocaliBlocks;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
 
 public class AerocaliTabs {
+    // Register all Aerocali Tabs aka only one
     public static final DeferredRegister<CreativeModeTab> AEROCALI_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, "aerocali");
 
+    // The main Aerocali Tab
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> AEROCALI_TAB =
             AEROCALI_TABS.register("aerocali_tab", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.aerocali_tab"))

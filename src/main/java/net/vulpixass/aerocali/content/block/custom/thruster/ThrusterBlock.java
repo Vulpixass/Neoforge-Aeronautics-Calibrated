@@ -32,6 +32,7 @@ public class ThrusterBlock extends BasePropellerBlock {
     public static final BooleanProperty ION_MODE = BooleanProperty.create("ion_mode");
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 
+    // Defines and sets custom Values to the Blocks Properties
     public ThrusterBlock(BlockBehaviour.Properties props) {
         super(props);
         this.registerDefaultState(this.stateDefinition.any()
@@ -51,8 +52,8 @@ public class ThrusterBlock extends BasePropellerBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ThrusterBlockEntity(pos, state);
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new ThrusterBlockEntity(blockPos, blockState);
     }
 
     @Override
@@ -60,6 +61,7 @@ public class ThrusterBlock extends BasePropellerBlock {
         return RenderShape.MODEL;
     }
 
+    // sets the custom Shape of the block for every direction
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         Direction dir = state.getValue(FACING);
@@ -87,6 +89,7 @@ public class ThrusterBlock extends BasePropellerBlock {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hitResult) {
+        // Enables Ion Mode
         if (stack.getItem() instanceof IonUpgradeItem && !state.getValue(ION_MODE)) {
             if (!level.isClientSide) {
                 level.setBlock(pos, state.setValue(ION_MODE, true), 3);
@@ -95,6 +98,7 @@ public class ThrusterBlock extends BasePropellerBlock {
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        // Disables Ion Mode
         if (player.isShiftKeyDown() && stack.isEmpty() && state.getValue(ION_MODE)) {
             if (!level.isClientSide) {
                 level.setBlock(pos, state.setValue(ION_MODE, false), 3);

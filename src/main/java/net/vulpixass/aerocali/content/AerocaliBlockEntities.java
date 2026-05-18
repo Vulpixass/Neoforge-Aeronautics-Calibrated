@@ -10,7 +10,7 @@ import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.nav_tracker.NavigationTrackerBlockEntity;
 
 public class AerocaliBlockEntities {
-
+    // Register all BlockEntities
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries
             .BLOCK_ENTITY_TYPE, "aerocali");
 

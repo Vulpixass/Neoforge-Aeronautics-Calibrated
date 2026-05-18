@@ -19,6 +19,7 @@ public class AerocaliItemProperties {
                         tryBuild(AeronauticsCalibrated.MOD_ID, "nav_angle")), AerocaliItemProperties::computeAngle);
     }
 
+    // Compute the Navigation Compass's Needle angle
     private static float computeAngle(ItemStack stack, Level level, LivingEntity entity, int seed) {
         if (entity == null || level == null) return 0f;
 

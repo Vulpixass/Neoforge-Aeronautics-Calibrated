@@ -10,6 +10,7 @@ import net.vulpixass.aerocali.AeronauticsCalibrated;
 import java.util.Objects;
 
 public class AerocaliSounds {
+    // Registers all the Sounds
     public static final DeferredRegister<SoundEvent> SOUNDS =
             DeferredRegister.create(Registries.SOUND_EVENT, AeronauticsCalibrated.MOD_ID);
 

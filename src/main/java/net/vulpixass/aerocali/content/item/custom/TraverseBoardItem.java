@@ -22,20 +22,24 @@ public class TraverseBoardItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        NavTargetData data = AerocaliDataComponents.NAV_TARGET_DATA.get(stack);
         if (level.isClientSide()) return InteractionResultHolder.sidedSuccess(stack, true);
 
+        // Clears the Boards Target
         if (player.isShiftKeyDown()) {
             stack.remove(AerocaliDataComponents.NAV_TARGET.get());
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOOK_PUT, SoundSource.PLAYERS, 1.0f, 1.0f);
             return InteractionResultHolder.success(stack);
-        } else {
+        }
+        // Sets the Boards Target
+        else {
             NavTargetData newData = new NavTargetData((int) player.getX(), (int) player.getY(), (int) player.getZ(), level.dimension().location().toString());
             stack.set(AerocaliDataComponents.NAV_TARGET.get(), newData);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.VILLAGER_WORK_LIBRARIAN, SoundSource.PLAYERS, 1.0f, 1.0f);
             return InteractionResultHolder.success(stack);
         }
     }
+
+    // adds "Tooltip" information
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.aerocali.traverse_board.usage")

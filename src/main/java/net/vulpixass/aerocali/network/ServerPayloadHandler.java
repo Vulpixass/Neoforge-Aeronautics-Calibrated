@@ -18,6 +18,7 @@ public class ServerPayloadHandler {
             Player player = context.player();
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
+            // Set the Items data if it is a Navigation Compass
             if (stack.getItem() instanceof NavigationElementItem) {
                 NavTargetData newData = new NavTargetData((int) data.x(), (int) data.y(), (int) data.z(), "minecraft:overworld");
                 stack.set(AerocaliDataComponents.NAV_TARGET.get(), newData);
