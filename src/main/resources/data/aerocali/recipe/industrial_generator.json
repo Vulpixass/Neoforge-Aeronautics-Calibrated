@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "H": {
+      "item": "create:electron_tube"
+    },
+    "B": {
+      "item": "create:industrial_iron_block"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "pattern": [
+    "BSB",
+    "HIH",
+    "BSB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "aerocali:industrial_generator"
+  }
+}

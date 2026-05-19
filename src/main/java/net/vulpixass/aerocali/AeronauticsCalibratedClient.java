@@ -42,6 +42,8 @@ public class AeronauticsCalibratedClient {
 
         // Register the BlockEntityRenderers for the BlockEntities that need one
         BlockEntityRenderers.register(AerocaliBlockEntities.GENERATOR.get(), GeneratorRenderer::new);
+        BlockEntityRenderers.register(AerocaliBlockEntities.INDUSTRIAL_GENERATOR.get(), GeneratorRenderer::new);
+        BlockEntityRenderers.register(AerocaliBlockEntities.CREATIVE_GENERATOR.get(), GeneratorRenderer::new);
         BlockEntityRenderers.register(AerocaliBlockEntities.TRACKER.get(), NavigationTrackerRenderer::new);
 
         event.enqueueWork(() -> {
@@ -58,6 +60,8 @@ public class AeronauticsCalibratedClient {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // I guess just render the BlockEntityRenderers again IDR how this worked XD!
         event.registerBlockEntityRenderer(AerocaliBlockEntities.GENERATOR.get(), GeneratorRenderer::new);
+        event.registerBlockEntityRenderer(AerocaliBlockEntities.INDUSTRIAL_GENERATOR.get(), GeneratorRenderer::new);
+        event.registerBlockEntityRenderer(AerocaliBlockEntities.CREATIVE_GENERATOR.get(), GeneratorRenderer::new);
         event.registerBlockEntityRenderer(AerocaliBlockEntities.TRACKER.get(), NavigationTrackerRenderer::new);
     }
 }

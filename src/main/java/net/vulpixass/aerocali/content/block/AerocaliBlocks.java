@@ -7,7 +7,10 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.creative.CreativeGeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.creative.CreativeGeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.industrial.IndustrialGeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.regular.GeneratorBlock;
 import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlock;
 import net.vulpixass.aerocali.content.block.custom.nav_tracker.NavigationTrackerBlock;
 
@@ -29,6 +32,18 @@ public class AerocaliBlocks {
                     () -> new GeneratorBlock(Block.Properties.of().strength(2f)));
     public static final DeferredItem<BlockItem> GENERATOR_ITEM = ITEMS.register("generator",
             () -> new BlockItem(AerocaliBlocks.GENERATOR.get(), new Item.Properties()));
+
+    public static final DeferredHolder<Block, IndustrialGeneratorBlock> INDUSTRIAL_GENERATOR =
+            BLOCKS.register("industrial_generator",
+                    () -> new IndustrialGeneratorBlock(Block.Properties.of().strength(2f)));
+    public static final DeferredItem<BlockItem> INDUSTRIAL_GENERATOR_ITEM = ITEMS.register("industrial_generator",
+            () -> new BlockItem(AerocaliBlocks.INDUSTRIAL_GENERATOR.get(), new Item.Properties()));
+
+    public static final DeferredHolder<Block, CreativeGeneratorBlock> CREATIVE_GENERATOR =
+            BLOCKS.register("creative_generator",
+                    () -> new CreativeGeneratorBlock(Block.Properties.of().strength(2f)));
+    public static final DeferredItem<BlockItem> CREATIVE_GENERATOR_ITEM = ITEMS.register("creative_generator",
+            () -> new BlockItem(AerocaliBlocks.CREATIVE_GENERATOR.get(), new Item.Properties()));
 
     public static final DeferredHolder<Block, NavigationTrackerBlock> TRACKER =
             BLOCKS.register("tracker",

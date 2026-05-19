@@ -7,21 +7,27 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.vulpixass.aerocali.AeronauticsCalibrated;
 import net.vulpixass.aerocali.client.ClientAccess;
-import net.vulpixass.aerocali.content.AerocaliBlockEntities;
+import net.vulpixass.aerocali.content.block.custom.generator.industrial.IndustrialGeneratorBlockEntity;
 
 import java.util.List;
 
-public class GeneratorBlockEntity extends KineticBlockEntity {
+public class BaseGeneratorBlockEntity extends KineticBlockEntity {
     public Object generatorSound;
-    private final GeneratorEnergy energy = new GeneratorEnergy(5000, 500, 500);
+    public float SUFactor = 1.0f;
+    public float generationFactor = 0.75f;
+    public boolean infiniteEnergy = false;
+    public int FELimit = 60;
+    private final BaseGeneratorBlockEntity.GeneratorEnergy energy = new BaseGeneratorBlockEntity.GeneratorEnergy(5000, 500, 500);
 
-    public GeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(AerocaliBlockEntities.GENERATOR.get(), pos, state);
+    public BaseGeneratorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Override
@@ -29,7 +35,6 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
         super.onSpeedChanged(previousSpeed);
         setChanged();
     }
-
 
     @Override
     public void tick() {
@@ -46,7 +51,7 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
         if (level.getGameTime() % 4 == 0) {
             float speed = Math.abs(getSpeed());
             if (speed > 0) {
-                int generated = (int) Math.min(60, speed * 0.75f);
+                int generated = (int) Math.min(FELimit, speed * generationFactor);
 
                 energy.receiveEnergy(generated, false);
                 setChanged();
@@ -55,7 +60,13 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
         }
 
         // Distribute the FE
-        if (energy.getEnergyStored() > 0) {
+        if (!infiniteEnergy) {
+            if (energy.getEnergyStored() > 0) {
+                distributeEnergy();
+                sendData();
+            }
+        } else {
+            energy.receiveEnergy(1000000, false);
             distributeEnergy();
             sendData();
         }
@@ -63,7 +74,7 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
 
 
     private void distributeEnergy() {
-        Direction facing = getBlockState().getValue(GeneratorBlock.FACING);
+        Direction facing = getBlockState().getValue(BaseGeneratorBlock.FACING);
         Direction.Axis rotationAxis = facing.getAxis();
 
         for (Direction side : Direction.values()) {
@@ -98,7 +109,10 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
 
     @Override
     public float calculateStressApplied() {
-        return 4.0f;
+        if (Math.sqrt(Math.abs(getSpeed())) < 2) {
+            return SUFactor * 2;
+        }
+        return (int) (SUFactor * Math.sqrt(Math.abs(getSpeed())) / 2);
     }
 
     @Override
@@ -128,7 +142,7 @@ public class GeneratorBlockEntity extends KineticBlockEntity {
         tooltip.add(Component.literal("    Generator Stats:").withStyle(ChatFormatting.GRAY));
 
         float speed = Math.abs(getSpeed());
-        int currentGen = (int) Math.min(60, speed * 0.75f);
+        int currentGen = (int) Math.min(FELimit, speed * generationFactor);
 
         tooltip.add(Component.literal("     » ")
                 .append(Component.literal(currentGen / 4 + " FE/t").withStyle(ChatFormatting.AQUA)));

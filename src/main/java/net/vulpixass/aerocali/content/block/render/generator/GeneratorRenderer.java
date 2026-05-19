@@ -11,19 +11,21 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlock;
-import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.BaseGeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.BaseGeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.regular.GeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.regular.GeneratorBlockEntity;
 
-public class GeneratorRenderer extends KineticBlockEntityRenderer<GeneratorBlockEntity> {
+public class GeneratorRenderer extends KineticBlockEntityRenderer<BaseGeneratorBlockEntity> {
     public GeneratorRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
-    protected void renderSafe(GeneratorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+    protected void renderSafe(BaseGeneratorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         // Renders the Generators Shaft
         BlockState state = be.getBlockState();
-        Direction facing = state.getValue(GeneratorBlock.FACING);
+        Direction facing = state.getValue(BaseGeneratorBlock.FACING);
         Direction.Axis axis = facing.getAxis();
 
         SuperByteBuffer shaft = CachedBuffers.partial(AllPartialModels.SHAFT, state);
@@ -55,8 +57,8 @@ public class GeneratorRenderer extends KineticBlockEntityRenderer<GeneratorBlock
 
     // Allow any rotation of the Model
     @Override
-    protected SuperByteBuffer getRotatedModel(GeneratorBlockEntity be, BlockState state) {
-        Direction.Axis axis = state.getValue(GeneratorBlock.FACING).getAxis();
+    protected SuperByteBuffer getRotatedModel(BaseGeneratorBlockEntity be, BlockState state) {
+        Direction.Axis axis = state.getValue(BaseGeneratorBlock.FACING).getAxis();
         return CachedBuffers.partialFacing(AllPartialModels.SHAFT, state,
                 Direction.get(Direction.AxisDirection.POSITIVE, axis));
     }

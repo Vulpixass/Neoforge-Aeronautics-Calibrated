@@ -2,7 +2,7 @@ package net.vulpixass.aerocali.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
-import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.BaseGeneratorBlockEntity;
 import net.vulpixass.aerocali.content.sound.GeneratorSoundInstance;
 import net.vulpixass.aerocali.content.ui.NavInputScreen;
 
@@ -13,7 +13,7 @@ public class ClientAccess {
     }
 
     // Have the generator sound be played by the block whenever active
-    public static void manageSound(GeneratorBlockEntity be) {
+    public static void manageSound(BaseGeneratorBlockEntity be) {
         float speed = Math.abs(be.getSpeed());
 
         if (speed > 0.01f && be.generatorSound == null) {

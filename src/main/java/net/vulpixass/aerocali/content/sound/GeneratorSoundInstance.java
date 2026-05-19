@@ -3,13 +3,14 @@ package net.vulpixass.aerocali.content.sound;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.BaseGeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.generator.regular.GeneratorBlockEntity;
 
 public class GeneratorSoundInstance extends AbstractTickableSoundInstance {
-    private final GeneratorBlockEntity blockEntity;
+    private final BaseGeneratorBlockEntity blockEntity;
 
     // Define the Generator Sound (Yes it really is just bees)
-    public GeneratorSoundInstance(GeneratorBlockEntity blockEntity) {
+    public GeneratorSoundInstance(BaseGeneratorBlockEntity blockEntity) {
         super(SoundEvents.BEE_LOOP, SoundSource.BLOCKS, blockEntity.getLevel().random);
         this.blockEntity = blockEntity;
         this.x = blockEntity.getBlockPos().getX() + 0.5f;

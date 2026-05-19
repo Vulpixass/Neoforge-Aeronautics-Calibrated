@@ -25,7 +25,9 @@ import net.vulpixass.aerocali.capabilities.AerocaliCapabilities;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.AerocaliTabs;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
-import net.vulpixass.aerocali.content.block.custom.generator.GeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.creative.CreativeGeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.industrial.IndustrialGeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.generator.regular.GeneratorBlock;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
 import net.vulpixass.aerocali.content.item.data.NavDataStorage;
 import net.vulpixass.aerocali.content.item.data.NavTarget;
@@ -97,6 +99,8 @@ public class AeronauticsCalibrated {
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(AerocaliBlocks.THRUSTER_ITEM);
             event.accept(AerocaliBlocks.GENERATOR_ITEM);
+            event.accept(AerocaliBlocks.INDUSTRIAL_GENERATOR_ITEM);
+            event.accept(AerocaliBlocks.CREATIVE_GENERATOR_ITEM);
         }
     }
 
@@ -112,8 +116,12 @@ public class AeronauticsCalibrated {
                 (thruster, ctx) -> thruster.getEnergyStorage());
         event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.GENERATOR.get(),
                 (generator, ctx) -> generator.getEnergyStorage());
+        event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.INDUSTRIAL_GENERATOR.get(),
+                (generator, ctx) -> generator.getEnergyStorage());
+        event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.CREATIVE_GENERATOR.get(),
+                (generator, ctx) -> generator.getEnergyStorage());
 
-        // Depict where the wires can connect to power the BlockEntity
+        // Depict where the wires can connect to power the Thruster
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.THRUSTER.get(),
                 (thruster, side) -> {
                     if (side == null) return null;
@@ -124,11 +132,34 @@ public class AeronauticsCalibrated {
                     return null;
                 });
 
+        // Depict where the wires can connect to power the Generators
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.GENERATOR.get(),
                 (generator, side) -> {
                     if (side == null) return generator.getEnergyStorage();
 
                     Direction facing = generator.getBlockState().getValue(GeneratorBlock.FACING);
+                    if (side.getAxis() != facing.getAxis()) {
+                        return generator.getEnergyStorage();
+                    }
+
+                    return null;
+                });
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.INDUSTRIAL_GENERATOR.get(),
+                (generator, side) -> {
+                    if (side == null) return generator.getEnergyStorage();
+
+                    Direction facing = generator.getBlockState().getValue(IndustrialGeneratorBlock.FACING);
+                    if (side.getAxis() != facing.getAxis()) {
+                        return generator.getEnergyStorage();
+                    }
+
+                    return null;
+                });
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.CREATIVE_GENERATOR.get(),
+                (generator, side) -> {
+                    if (side == null) return generator.getEnergyStorage();
+
+                    Direction facing = generator.getBlockState().getValue(CreativeGeneratorBlock.FACING);
                     if (side.getAxis() != facing.getAxis()) {
                         return generator.getEnergyStorage();
                     }

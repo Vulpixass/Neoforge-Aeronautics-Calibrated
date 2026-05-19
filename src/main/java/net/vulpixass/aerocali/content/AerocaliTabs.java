@@ -25,6 +25,8 @@ public class AerocaliTabs {
                         output.accept(AerocaliItems.IONIZED_THERMAL_MECHANISM.get());
                         output.accept(AerocaliBlocks.THRUSTER_ITEM.get());
                         output.accept(AerocaliBlocks.GENERATOR_ITEM.get());
+                        output.accept(AerocaliBlocks.INDUSTRIAL_GENERATOR_ITEM.get());
+                        output.accept(AerocaliBlocks.CREATIVE_GENERATOR_ITEM.get());
                         output.accept(AerocaliBlocks.TRACKER_ITEM.get());
                         output.accept(AerocaliItems.TRAVERSE_BOARD.get());
                     })

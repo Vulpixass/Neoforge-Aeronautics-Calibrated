@@ -1,6 +1,7 @@
 {
   "values": [
     "aerocali:thruster",
-    "aerocali:generator"
+    "aerocali:generator",
+    "aerocali:industrial_generator"
   ]
 }

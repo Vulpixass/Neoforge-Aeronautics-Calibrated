@@ -28,10 +28,17 @@ public class PonderScenes {
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> registry) {
         registry.forComponents(List.of(AerocaliBlocks.THRUSTER.getId())).addStoryBoard("thruster_functionality", PonderScenes::thrusterFunctionality,
                         ResourceLocation.fromNamespaceAndPath("aerocali", "thruster_functionality"));
+
         registry.forComponents(List.of(AerocaliItems.IONIZED_THERMAL_MECHANISM.getId())).addStoryBoard("thruster_upgrading",
                 PonderScenes::thrusterUpgrading, ResourceLocation.fromNamespaceAndPath("aerocali", "thruster_upgrading"));
+
         registry.forComponents(List.of(AerocaliBlocks.GENERATOR.getId())).addStoryBoard("generator_functionality", PonderScenes::generatorFunctionality,
                 ResourceLocation.fromNamespaceAndPath("aerocali", "generator_functionality"));
+        registry.forComponents(List.of(AerocaliBlocks.INDUSTRIAL_GENERATOR.getId())).addStoryBoard("generator_functionality", PonderScenes::generatorFunctionality,
+                ResourceLocation.fromNamespaceAndPath("aerocali", "generator_functionality"));
+        registry.forComponents(List.of(AerocaliBlocks.CREATIVE_GENERATOR.getId())).addStoryBoard("generator_functionality", PonderScenes::generatorFunctionality,
+                ResourceLocation.fromNamespaceAndPath("aerocali", "generator_functionality"));
+
         registry.forComponents(List.of(AerocaliBlocks.TRACKER.getId())).addStoryBoard("tracker_functionality", PonderScenes::trackerFunctionality,
                 ResourceLocation.fromNamespaceAndPath("aerocali", "tracker_functionality"));
 

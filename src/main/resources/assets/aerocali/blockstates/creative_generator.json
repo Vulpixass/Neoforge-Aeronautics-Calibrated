@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "aerocali:block/creative_generator" },
+    "facing=south": { "model": "aerocali:block/creative_generator", "y": 180 },
+    "facing=east":  { "model": "aerocali:block/creative_generator", "y": 90 },
+    "facing=west":  { "model": "aerocali:block/creative_generator", "y": 270 },
+    "facing=up":    { "model": "aerocali:block/creative_generator", "x": 270 },
+    "facing=down":  { "model": "aerocali:block/creative_generator", "x": 90 }
+  }
+}
