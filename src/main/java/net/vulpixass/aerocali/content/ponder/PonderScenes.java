@@ -1,6 +1,7 @@
 package net.vulpixass.aerocali.content.ponder;
 
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
+import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.createmod.ponder.api.scene.SceneBuilder;
@@ -12,13 +13,16 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.RedstoneLampBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
+import net.vulpixass.aerocali.content.block.custom.cable.CableBlock;
 import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlockEntity;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
 
@@ -26,22 +30,145 @@ import java.util.List;
 
 public class PonderScenes {
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> registry) {
-        registry.forComponents(List.of(AerocaliBlocks.THRUSTER.getId())).addStoryBoard("thruster_functionality", PonderScenes::thrusterFunctionality,
-                        ResourceLocation.fromNamespaceAndPath("aerocali", "thruster_functionality"));
+        PonderSceneRegistrationHelper<DeferredHolder<?, ?>> helper = registry.withKeyFunction(DeferredHolder::getId);
+        ResourceLocation aerocaliGroupId = ResourceLocation.fromNamespaceAndPath("aerocali", "aerocali");
 
-        registry.forComponents(List.of(AerocaliItems.IONIZED_THERMAL_MECHANISM.getId())).addStoryBoard("thruster_upgrading",
-                PonderScenes::thrusterUpgrading, ResourceLocation.fromNamespaceAndPath("aerocali", "thruster_upgrading"));
+        helper.forComponents(AerocaliBlocks.THRUSTER)
+                .addStoryBoard("thruster_functionality", PonderScenes::thrusterFunctionality, aerocaliGroupId);
 
-        registry.forComponents(List.of(AerocaliBlocks.GENERATOR.getId())).addStoryBoard("generator_functionality", PonderScenes::generatorFunctionality,
-                ResourceLocation.fromNamespaceAndPath("aerocali", "generator_functionality"));
-        registry.forComponents(List.of(AerocaliBlocks.INDUSTRIAL_GENERATOR.getId())).addStoryBoard("generator_functionality", PonderScenes::generatorFunctionality,
-                ResourceLocation.fromNamespaceAndPath("aerocali", "generator_functionality"));
-        registry.forComponents(List.of(AerocaliBlocks.CREATIVE_GENERATOR.getId())).addStoryBoard("generator_functionality", PonderScenes::generatorFunctionality,
-                ResourceLocation.fromNamespaceAndPath("aerocali", "generator_functionality"));
+        helper.forComponents(AerocaliItems.IONIZED_THERMAL_MECHANISM)
+                .addStoryBoard("thruster_upgrading", PonderScenes::thrusterUpgrading, aerocaliGroupId);
 
-        registry.forComponents(List.of(AerocaliBlocks.TRACKER.getId())).addStoryBoard("tracker_functionality", PonderScenes::trackerFunctionality,
-                ResourceLocation.fromNamespaceAndPath("aerocali", "tracker_functionality"));
+        helper.forComponents(AerocaliBlocks.GENERATOR, AerocaliBlocks.INDUSTRIAL_GENERATOR, AerocaliBlocks.CREATIVE_GENERATOR)
+                .addStoryBoard("generator_functionality", PonderScenes::generatorFunctionality, aerocaliGroupId);
 
+        helper.forComponents(AerocaliBlocks.TRACKER)
+                .addStoryBoard("tracker_functionality", PonderScenes::trackerFunctionality, aerocaliGroupId);
+
+        helper.forComponents(AerocaliBlocks.CABLE)
+                .addStoryBoard("cable_functionality", PonderScenes::cableFunctionality, aerocaliGroupId);
+
+        helper.forComponents(AerocaliBlocks.MECHANICAL_ANVIL)
+                .addStoryBoard("anvil_functionality", PonderScenes::anvilFunctionality, aerocaliGroupId);
+    }
+
+    // Mechanical Anvil Functionality Scene
+    public static void anvilFunctionality(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+
+        scene.title("anvil_functionality", "How the Mechanical Anvil works");
+
+        scene.configureBasePlate(0, 0, 5);
+        scene.idle(15);
+        scene.world().showSection(util.select().everywhere(), Direction.DOWN);
+        scene.idle(10);
+
+        scene.overlay().showText(30).text("This is the Mechanical Anvil.")
+                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(35);
+
+        scene.overlay().showText(45).text("Depending on the RPM inputted...")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(40);
+        scene.world().setKineticSpeed(util.select().everywhere(), 16.0f);
+        scene.idle(5);
+
+        scene.overlay().showText(60).text("The Anvil will change its Mass!")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(65);
+
+        scene.world().setKineticSpeed(util.select().everywhere(), 0f);
+        scene.overlay().showText(30).text("The Anvil can change its mass to 4 Values:")
+                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(35);
+
+        scene.world().setKineticSpeed(util.select().everywhere(), 16f);
+        scene.overlay().showText(30).text("Super Light")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(35);
+
+        scene.world().setKineticSpeed(util.select().everywhere(), 32f);
+        scene.overlay().showText(30).text("Light")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(35);
+
+        scene.world().setKineticSpeed(util.select().everywhere(), 64f);
+        scene.overlay().showText(30).text("Heavy")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(35);
+
+        scene.world().setKineticSpeed(util.select().everywhere(), 128f);
+        scene.overlay().showText(40).text("And Lastly Super Heavy")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(45);
+    }
+
+    // Cable Functionality Scene
+    public static void cableFunctionality(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+
+        BlockPos cablePos = new BlockPos(2, 1, 2);
+
+        scene.title("cable_functionality", "How the Electron Cable works");
+
+        scene.configureBasePlate(0, 0, 5);
+        scene.idle(15);
+        scene.world().showSection(util.select().layer(0), Direction.UP);
+        scene.world().showSection(util.select().position(2, 1, 2), Direction.UP);
+        scene.world().modifyBlock(cablePos, state -> {
+            if (state.hasProperty(CableBlock.NORTH) && state.hasProperty(CableBlock.SOUTH) && state.hasProperty(CableBlock.EAST) && state.hasProperty(CableBlock.WEST))
+                return state.setValue(CableBlock.NORTH, false).setValue(CableBlock.SOUTH, false).setValue(CableBlock.EAST, false)
+                        .setValue(CableBlock.WEST, false);
+            return state;
+        }, false);
+        scene.idle(10);
+
+        scene.overlay().showText(30).text("This is an Electron Cable.")
+                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(35);
+
+        scene.overlay().showText(60).text("It serves as a way to transfer FE from Point A to B")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(65);
+
+        scene.overlay().showText(40).text("When it does have power...")
+                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(45);
+
+        scene.world().modifyBlock(cablePos, state -> {
+            if (state.hasProperty(CableBlock.ACTIVE)) {
+                return state.setValue(CableBlock.ACTIVE, true);
+            }
+            return state;
+        }, false);
+        scene.effects().indicateSuccess(cablePos);
+
+        scene.overlay().showText(30).text("It turns On!")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(35);
+
+        scene.world().modifyBlock(cablePos, state -> {
+            if (state.hasProperty(CableBlock.ACTIVE)) {
+                return state.setValue(CableBlock.ACTIVE, false);
+            }
+            return state;
+        }, false);
+
+        scene.world().showSection(util.select().fromTo(4, 1, 2, 3, 1, 2), Direction.DOWN);
+        scene.world().showSection(util.select().fromTo(0, 1, 2, 1, 1, 2), Direction.DOWN);
+        scene.world().showSection(util.select().fromTo(2, 1, 3, 2, 1, 4), Direction.DOWN);
+        scene.world().showSection(util.select().fromTo(2, 1, 0, 2, 1, 1), Direction.DOWN);
+        scene.idle(5);
+        scene.world().modifyBlock(cablePos, state -> {
+            if (state.hasProperty(CableBlock.NORTH) && state.hasProperty(CableBlock.SOUTH) && state.hasProperty(CableBlock.EAST) && state.hasProperty(CableBlock.WEST))
+                return state.setValue(CableBlock.NORTH, true).setValue(CableBlock.SOUTH, true).setValue(CableBlock.EAST, true)
+                        .setValue(CableBlock.WEST, true);
+            return state;
+        }, false);
+
+        scene.overlay().showText(60).text("When other Cables are next to it, it transfers Power")
+                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(65);
     }
 
     // Tracker Functionality Scene

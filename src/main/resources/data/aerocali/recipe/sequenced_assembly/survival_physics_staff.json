@@ -1,0 +1,108 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:wrench"
+  },
+  "loops": 3,
+  "results": [
+    {
+      "chance": 120.0,
+      "id": "aerocali:survival_physics_staff"
+    },
+    {
+      "chance": 8.0,
+      "id": "create:brass_sheet"
+    },
+    {
+      "chance": 8.0,
+      "id": "create:wrench"
+    },
+    {
+      "chance": 2.0,
+      "id": "create:brass_casing"
+    },
+    {
+      "chance": 5.0,
+      "id": "create:brass_nugget"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create:wrench"
+        },
+        {
+          "item": "create:brass_casing"
+        }
+      ],
+      "results": [
+        {
+          "id": "create:wrench"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create:wrench"
+        }
+      ],
+      "results": [
+        {
+          "id": "create:wrench"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create:wrench"
+        },
+        {
+          "item": "create:precision_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "id": "create:wrench"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create:wrench"
+        },
+        {
+          "item": "minecraft:nether_star"
+        }
+      ],
+      "results": [
+        {
+          "id": "create:wrench"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create:wrench"
+        }
+      ],
+      "results": [
+        {
+          "id": "create:wrench"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create:wrench"
+  }
+}

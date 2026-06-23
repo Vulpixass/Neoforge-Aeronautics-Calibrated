@@ -7,10 +7,12 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.vulpixass.aerocali.content.block.custom.cable.CableBlock;
+import net.vulpixass.aerocali.content.block.custom.cable.CableBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.generator.creative.CreativeGeneratorBlock;
-import net.vulpixass.aerocali.content.block.custom.generator.creative.CreativeGeneratorBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.generator.industrial.IndustrialGeneratorBlock;
 import net.vulpixass.aerocali.content.block.custom.generator.regular.GeneratorBlock;
+import net.vulpixass.aerocali.content.block.custom.mechanical_anvil.MechanicalAnvilBlock;
 import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlock;
 import net.vulpixass.aerocali.content.block.custom.nav_tracker.NavigationTrackerBlock;
 
@@ -51,4 +53,24 @@ public class AerocaliBlocks {
     public static final DeferredItem<BlockItem> TRACKER_ITEM = ITEMS.register("tracker",
             () -> new BlockItem(AerocaliBlocks.TRACKER.get(), new Item.Properties()));
 
+    public static final DeferredHolder<Block, MechanicalAnvilBlock> MECHANICAL_ANVIL =
+            BLOCKS.register("mechanical_anvil",
+                    () -> new MechanicalAnvilBlock(Block.Properties.of().strength(2f), 0));
+    public static final DeferredHolder<Block, MechanicalAnvilBlock> LIGHT_MECHANICAL_ANVIL =
+            BLOCKS.register("light_mechanical_anvil",
+                    () -> new MechanicalAnvilBlock(Block.Properties.of().strength(2f), 1));
+    public static final DeferredHolder<Block, MechanicalAnvilBlock> HEAVY_MECHANICAL_ANVIL =
+            BLOCKS.register("heavy_mechanical_anvil",
+                    () -> new MechanicalAnvilBlock(Block.Properties.of().strength(2f), 2));
+    public static final DeferredHolder<Block, MechanicalAnvilBlock> SUPER_HEAVY_MECHANICAL_ANVIL =
+            BLOCKS.register("super_heavy_mechanical_anvil",
+                    () -> new MechanicalAnvilBlock(Block.Properties.of().strength(2f), 3));
+    public static final DeferredItem<BlockItem> MECHANICAL_ANVIL_ITEM = ITEMS.register("mechanical_anvil",
+            () -> new BlockItem(AerocaliBlocks.MECHANICAL_ANVIL.get(), new Item.Properties()));
+
+    public static final DeferredHolder<Block, CableBlock> CABLE =
+            BLOCKS.register("cable",
+                    () -> new CableBlock(Block.Properties.of().strength(2f)));
+    public static final DeferredItem<BlockItem> CABLE_ITEM = ITEMS.register("cable",
+            () -> new BlockItem(AerocaliBlocks.CABLE.get(), new Item.Properties()));
 }

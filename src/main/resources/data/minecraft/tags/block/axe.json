@@ -1,6 +1,7 @@
 {
   "values": [
     "aerocali:generator",
-    "aerocali:tracker"
+    "aerocali:tracker",
+    "aerocali:mechanical_anvil"
   ]
 }

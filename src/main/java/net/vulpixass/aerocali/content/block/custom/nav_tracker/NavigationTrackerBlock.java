@@ -8,6 +8,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.item.custom.NavigationElementItem;
 
@@ -102,6 +105,28 @@ public class NavigationTrackerBlock extends DirectionalKineticBlock implements I
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
+    // Drops the Compass once the Tracker is broken
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof NavigationTrackerBlockEntity tracker) {
+                ItemStackHandler inv = tracker.getInventory();
+                for (int i = 0; i < inv.getSlots(); i++) {
+                    ItemStack stack = inv.getStackInSlot(i);
+                    if (!stack.isEmpty()) {
+                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack.copy());
+                        inv.setStackInSlot(i, ItemStack.EMPTY);
+                    }
+                }
+            }
+            super.onRemove(state, level, pos, newState, isMoving);
+            return;
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+
     @Override
     public boolean isSignalSource(BlockState state) {
         return true;
@@ -133,20 +158,19 @@ public class NavigationTrackerBlock extends DirectionalKineticBlock implements I
         return be instanceof NavTableBlockEntity;
     }
 
-    // Destroys all Blocks above itself that are NOT a shaft
+    // Destroys all Blocks above itself that are NOT a shaft (and itself if the Navigation Table isn't there)
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-        if (!state.canSurvive(level, currentPos)) {
-            return Blocks.AIR.defaultBlockState();
-        }
-        if (direction == Direction.UP && !neighborState.isAir()) {
-            if (!(neighborState.getBlock() instanceof ShaftBlock)) {
-                if (level instanceof Level world && !world.isClientSide) {
+        if (level instanceof Level world && !world.isClientSide) {
+            if (!state.canSurvive(level, currentPos)) {
+                world.destroyBlock(currentPos, true);
+            }
+            if (direction == Direction.UP && !neighborState.isAir()) {
+                if (!(neighborState.getBlock() instanceof ShaftBlock)) {
                     world.destroyBlock(neighborPos, true);
                 }
             }
         }
-
         return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
     }
 }

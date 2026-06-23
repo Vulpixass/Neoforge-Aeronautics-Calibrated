@@ -25,6 +25,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.vulpixass.aerocali.util.config.AerocaliAllConfigs;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
 import net.vulpixass.aerocali.util.JOMLConversion;
@@ -71,7 +72,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
 
     @Override
     public double getConfigThrust() {
-        return 500;
+        return AerocaliAllConfigs.common.maxThrust.get();
     }
 
     @Override
@@ -147,7 +148,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         if (canRun && hasEnergy && energy.extractEnergy(FEperTick, true) == FEperTick) {
             energy.extractEnergy(FEperTick, false);
             power = rs / 15f;
-            thrust = power * 200f;
+            thrust = (float) (power * getConfigThrust());
             if (ion) thrust *= 2;
 
             airflow = thrust * 0.8f;

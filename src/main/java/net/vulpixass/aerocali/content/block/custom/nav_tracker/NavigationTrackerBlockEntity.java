@@ -2,22 +2,21 @@ package net.vulpixass.aerocali.content.block.custom.nav_tracker;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
-import dev.eriksonn.aeronautics.index.AeroSoundEvents;
 import dev.simulated_team.simulated.content.blocks.nav_table.NavTableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.vulpixass.aerocali.util.config.AerocaliAllConfigs;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.item.custom.NavigationElementItem;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
+import net.vulpixass.aerocali.util.config.AerocaliConfigCommon;
 
 public class NavigationTrackerBlockEntity extends KineticBlockEntity {
     private int tick = 220;
@@ -88,14 +87,15 @@ public class NavigationTrackerBlockEntity extends KineticBlockEntity {
             double dx = currentPos.x - cachedTarget.x();
             double dz = currentPos.z - cachedTarget.z();
             double distance = Math.sqrt(dx * dx + dz * dz);
+            int maxRange = AerocaliAllConfigs.common.trackerRange.get();
 
             int power;
             if (distance <= 2) {
                 power = 15;
-            } else if (distance > 20) {
+            } else if (distance > maxRange) {
                 power = 0;
             } else {
-                power = (int) (15 - (distance / 20 * 14));
+                power = (int) (15 - (distance / maxRange * 14));
                 power = Math.max(1, power);
             }
             updateRedstone(power);

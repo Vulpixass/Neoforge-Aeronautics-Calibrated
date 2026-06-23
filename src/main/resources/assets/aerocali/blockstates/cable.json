@@ -1,0 +1,61 @@
+{
+  "multipart": [
+    {
+      "when": { "active": "true" },
+      "apply": { "model": "aerocali:block/cable/cable_core" }
+    },
+    {
+      "when": { "north": "true", "active": "true" },
+      "apply": { "model": "aerocali:block/cable/cable_side" }
+    },
+    {
+      "when": { "east": "true", "active": "true" },
+      "apply": { "model": "aerocali:block/cable/cable_side", "y": 90 }
+    },
+    {
+      "when": { "south": "true", "active": "true" },
+      "apply": { "model": "aerocali:block/cable/cable_side", "y": 180 }
+    },
+    {
+      "when": { "west": "true", "active": "true" },
+      "apply": { "model": "aerocali:block/cable/cable_side", "y": 270 }
+    },
+    {
+      "when": { "up": "true", "active": "true" },
+      "apply": { "model": "aerocali:block/cable/cable_side", "x": 270 }
+    },
+    {
+      "when": { "down": "true", "active": "true" },
+      "apply": { "model": "aerocali:block/cable/cable_side", "x": 90 }
+    },
+
+    {
+      "when": { "north": "true", "active": "false" },
+      "apply": { "model": "aerocali:block/cable/cable_side_inactive" }
+    },
+    {
+      "when": { "east": "true", "active": "false" },
+      "apply": { "model": "aerocali:block/cable/cable_side_inactive", "y": 90 }
+    },
+    {
+      "when": { "south": "true", "active": "false" },
+      "apply": { "model": "aerocali:block/cable/cable_side_inactive", "y": 180 }
+    },
+    {
+      "when": { "west": "true", "active": "false" },
+      "apply": { "model": "aerocali:block/cable/cable_side_inactive", "y": 270 }
+    },
+    {
+      "when": { "up": "true", "active": "false" },
+      "apply": { "model": "aerocali:block/cable/cable_side_inactive", "x": 270 }
+    },
+    {
+      "when": { "down": "true", "active": "false" },
+      "apply": { "model": "aerocali:block/cable/cable_side_inactive", "x": 90 }
+    },
+    {
+      "when": { "active":  "false"},
+      "apply": { "model": "aerocali:block/cable/cable_core_inactive"}
+    }
+  ]
+}

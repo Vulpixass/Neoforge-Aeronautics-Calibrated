@@ -2,6 +2,8 @@
   "values": [
     "aerocali:thruster",
     "aerocali:generator",
-    "aerocali:industrial_generator"
+    "aerocali:industrial_generator",
+    "aerocali:cable",
+    "aerocali:mechanical_anvil"
   ]
 }

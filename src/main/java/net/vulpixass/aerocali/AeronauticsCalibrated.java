@@ -6,15 +6,21 @@ import dev.simulated_team.simulated.index.SimDataComponents;
 import dev.simulated_team.simulated.index.SimRegistries;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -37,8 +43,10 @@ import net.vulpixass.aerocali.content.particle.AerocaliParticles;
 import net.vulpixass.aerocali.content.recipe.AerocaliRecipes;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
-import net.vulpixass.aerocali.network.NavUpdatePayload;
+import net.vulpixass.aerocali.network.packet.DamageStaffPayload;
+import net.vulpixass.aerocali.network.packet.NavUpdatePayload;
 import net.vulpixass.aerocali.network.ServerPayloadHandler;
+import net.vulpixass.aerocali.util.config.AerocaliAllConfigs;
 import org.slf4j.Logger;
 
 import java.util.function.Function;
@@ -60,6 +68,10 @@ public class AeronauticsCalibrated {
         modEventBus.addListener(this::register);
         AerocaliDataComponents.DATA_COMPONENTS.register(modEventBus);
 
+        ModContainer container = ModLoadingContext.get().getActiveContainer();
+        AerocaliAllConfigs.register(ModLoadingContext.get(), container);
+        modContainer.registerConfig(ModConfig.Type.STARTUP, AerocaliAllConfigs.SPEC);
+
         AerocaliBlocks.BLOCKS.register(modEventBus);
         AerocaliItems.ITEMS.register(modEventBus);
         AerocaliTabs.AEROCALI_TABS.register(modEventBus);
@@ -72,8 +84,6 @@ public class AeronauticsCalibrated {
         AerocaliSounds.SOUNDS.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
-
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -91,6 +101,7 @@ public class AeronauticsCalibrated {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(AerocaliItems.IONIZED_THERMAL_MECHANISM);
             event.accept(AerocaliItems.NAVIGATION_ELEMENT);
+            event.accept(AerocaliItems.SURVIVAL_PHYSICS_STAFF);
         }
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(AerocaliItems.THERMAL_MECHANISM);
@@ -101,6 +112,8 @@ public class AeronauticsCalibrated {
             event.accept(AerocaliBlocks.GENERATOR_ITEM);
             event.accept(AerocaliBlocks.INDUSTRIAL_GENERATOR_ITEM);
             event.accept(AerocaliBlocks.CREATIVE_GENERATOR_ITEM);
+            event.accept(AerocaliBlocks.MECHANICAL_ANVIL_ITEM);
+            event.accept(AerocaliBlocks.CABLE_ITEM);
         }
     }
 
@@ -120,6 +133,9 @@ public class AeronauticsCalibrated {
                 (generator, ctx) -> generator.getEnergyStorage());
         event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.CREATIVE_GENERATOR.get(),
                 (generator, ctx) -> generator.getEnergyStorage());
+
+    event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.CABLE.get(),
+                (cable, ctx) -> cable.getEnergyStorage());
 
         // Depict where the wires can connect to power the Thruster
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.THRUSTER.get(),
@@ -166,7 +182,8 @@ public class AeronauticsCalibrated {
 
                     return null;
                 });
-
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.CABLE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage());
         // Register the Inventory of the BlockEntity
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, AerocaliBlockEntities.TRACKER.get(),
                 (be, side) -> be.getInventory());
@@ -183,6 +200,7 @@ public class AeronauticsCalibrated {
 
         // Register the C2S packet Payload
         registrar.playToServer(NavUpdatePayload.TYPE, NavUpdatePayload.STREAM_CODEC, ServerPayloadHandler::handleNavUpdate);
+        registrar.playToServer(DamageStaffPayload.TYPE, DamageStaffPayload.CODEC, ServerPayloadHandler::handleStaffDamage);
     }
 
     @SubscribeEvent

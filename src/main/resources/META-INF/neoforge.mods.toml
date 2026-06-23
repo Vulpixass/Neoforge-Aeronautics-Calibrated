@@ -4,14 +4,16 @@ license="MIT"
 
 [[mods]]
 modId="aerocali"
-version="1.2.2"
+version="1.3.2"
 displayName="Aeronautics Calibrated"
 authors="Vulpixass"
 description='''
 A mod that adds extra features to Create Aeronautics that improve it slightly.
 '''
-mixins = ["aerocali.mixins.json"]
 logoFile = "aerocali.png"
+
+[[mixins]]
+config = "aerocali.mixins.json"
 
 [[dependencies.aerocali]]
 modId="neoforge"
@@ -30,7 +32,7 @@ side="BOTH"
 [[dependencies.aerocali]]
 modId="aeronautics_bundled"
 type="required"
-versionRange="[1.1.3,)"
+versionRange="[1.3.0,)"
 side="BOTH"
 
 [[dependencies.aerocali]]

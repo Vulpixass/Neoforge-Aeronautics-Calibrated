@@ -4,6 +4,9 @@
   "block.aerocali.industrial_generator": "Industrial Generator",
   "block.aerocali.creative_generator": "Creative Generator",
   "block.aerocali.tracker": "Navigation Tracker",
+  "block.aerocali.cable": "Electron Cable",
+  "block.aerocali.mechanical_anvil": "Mechanical Anvil",
+
 
   "item.aerocali.ion_upgrade": "Ion Thruster Upgrade",
   "item.aerocali.thermal_mechanism": "Thermal Mechanism",
@@ -12,15 +15,47 @@
 
   "item.aerocali.navigation_element": "Navigation Compass",
   "item.aerocali.traverse_board": "Traverse Board",
+  "item.aerocali.survival_physics_staff": "Physics Staff",
+
 
   "itemGroup.aerocali_tab": "Aeronautics: Calibrated",
 
+  "aerocali.ponder.tag.aerocali": "Aeronautics: Calibrated",
+  "aerocali.ponder.tag.aerocali.description": "All Ponders currently available and done in Aeronautics: Calibrated.",
+
+
   "tooltip.aerocali.traverse_board.usage": "§6Right Click this Item to save your current coordinates to it for later usage",
+
+  "tooltip.aerocali.survival_physics_staff.unpressed": "Hold [§7Shift§8] for Summary",
+  "tooltip.aerocali.survival_physics_staff.pressed": "Hold [§fShift§8] for Summary",
+
+  "tooltip.aerocali.survival_physics_staff.context_1": "§eTool §6for moving",
+  "tooltip.aerocali.survival_physics_staff.context_2": "§eSimulated Contraptions§6.",
+
+  "tooltip.aerocali.survival_physics_staff.l_click": "L-Click at Simulated Contraption",
+
+  "tooltip.aerocali.survival_physics_staff.l_click_desc_1": " The §eTargeted Contraption §6will become",
+  "tooltip.aerocali.survival_physics_staff.l_click_desc_2": " §elocked in place§6.",
+
+  "tooltip.aerocali.survival_physics_staff.r_click": "R-Click at Simulated Contraption",
+  "tooltip.aerocali.survival_physics_staff.r_click_desc_1": " §eToggle dragging §6the §eTargeted",
+  "tooltip.aerocali.survival_physics_staff.r_click_desc_2": " §eContraption §6around with the staff.",
+
+  "tooltip.aerocali.survival_physics_staff.tab": "Hold Tab while Dragging",
+  "tooltip.aerocali.survival_physics_staff.tab_desc_1": " Rotate the §eTargeted Contraption",
+  "tooltip.aerocali.survival_physics_staff.tab_desc_2": " §6with the Staff",
+
+  "tooltip.aerocali.survival_physics_staff.scroll": "Scroll while Dragging",
+  "tooltip.aerocali.survival_physics_staff.scroll_desc_1": " Adjusts §ehow far away §6you are",
+  "tooltip.aerocali.survival_physics_staff.scroll_desc_2": " §edragging §6the §eTargeted Contraption.",
+
 
   "aerocali.ponder.thruster_functionality.header": "How the Thruster works",
   "aerocali.ponder.generator_functionality.header": "How the Generator works",
   "aerocali.ponder.tracker_functionality.header": "How the Navigation Tracker works",
   "aerocali.ponder.thruster_upgrading.header": "How to upgrade the Thruster",
+  "aerocali.ponder.anvil_functionality.header": "How the Mechanical Anvil works",
+  "aerocali.ponder.cable_functionality.header": "How the Electron Cable works",
 
   "aerocali.ponder.thruster_functionality.text_1": "This is the main Thruster unit.",
   "aerocali.ponder.thruster_functionality.text_2": "By Powering it using a generator it gains FE.",
@@ -39,5 +74,24 @@
   "aerocali.ponder.tracker_functionality.text_2": "It requires a shaft above with an RPM speed of at least 30",
   "aerocali.ponder.tracker_functionality.text_3": "And a Navigation Table below to function.",
   "aerocali.ponder.tracker_functionality.text_4": "When a Navigation Compass is inputted, the Tracker will output a redstone signal depending on how far away it is from the target.",
-  "aerocali.ponder.tracker_functionality.text_5": "The Tracker will also pass the compass immediately to the Navigation Table below."
+  "aerocali.ponder.tracker_functionality.text_5": "The Tracker will also pass the compass immediately to the Navigation Table below.",
+
+  "aerocali.ponder.anvil_functionality.text_1": "This is the Mechanical Anvil.",
+  "aerocali.ponder.anvil_functionality.text_2": "Depending on the RPM inputted...",
+  "aerocali.ponder.anvil_functionality.text_3": "The Anvil will change its Mass!",
+  "aerocali.ponder.anvil_functionality.text_4": "The Anvil can change its mass to 4 Values:",
+  "aerocali.ponder.anvil_functionality.text_5": "§bSuper Light",
+  "aerocali.ponder.anvil_functionality.text_6": "§aLight",
+  "aerocali.ponder.anvil_functionality.text_7": "§eHeavy",
+  "aerocali.ponder.anvil_functionality.text_8": "And Lastly §cSuper Heavy",
+
+  "aerocali.ponder.cable_functionality.text_1": "This is an Electron Cable.",
+  "aerocali.ponder.cable_functionality.text_2": "It serves as a way to transfer FE from Point A to B",
+  "aerocali.ponder.cable_functionality.text_3": "When it does have power...",
+  "aerocali.ponder.cable_functionality.text_4": "It turns On!",
+  "aerocali.ponder.cable_functionality.text_5": "When other Cables are next to it, it transfers Power",
+
+
+  "aerocali.configuration.trackerRange": "Tracker Range",
+  "aerocali.configuration.maxThrust": "Maximum Thrust"
 }

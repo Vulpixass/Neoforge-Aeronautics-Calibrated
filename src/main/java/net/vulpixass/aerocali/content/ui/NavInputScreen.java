@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.vulpixass.aerocali.content.item.data.NavTargetData;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
-import net.vulpixass.aerocali.network.NavUpdatePayload;
+import net.vulpixass.aerocali.network.packet.NavUpdatePayload;
 
 public class NavInputScreen extends Screen {
 

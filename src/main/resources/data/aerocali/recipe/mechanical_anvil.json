@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "item": "create:shaft"
+    },
+    "G": {
+      "item": "create:gearbox"
+    },
+    "A": {
+      "item": "minecraft:anvil"
+    }
+  },
+  "pattern": [
+    "ASA",
+    " G "
+  ],
+  "result": {
+    "count": 1,
+    "id": "aerocali:mechanical_anvil"
+  }
+}

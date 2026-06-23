@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "create:polished_rose_quartz"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "Z": {
+      "item": "create:zinc_ingot"
+    }
+  },
+  "pattern": [
+    " P ",
+    "ZEZ",
+    " P "
+  ],
+  "result": {
+    "count": 8,
+    "id": "aerocali:cable"
+  }
+}

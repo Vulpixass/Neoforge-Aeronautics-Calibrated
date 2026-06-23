@@ -2,6 +2,7 @@ package net.vulpixass.aerocali.content.recipe.recipes;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -32,6 +33,8 @@ public class NavCompassRecipe extends CustomRecipe {
                 boardCount++;
             } else if (item.getItem() instanceof NavigationElementItem) {
                 compassCount++;
+            } else if (!(item.getItem().getDefaultInstance().isEmpty())) {
+                return false;
             }
         }
         return compassCount == 1 && boardCount == 1;
@@ -46,11 +49,27 @@ public class NavCompassRecipe extends CustomRecipe {
             ItemStack stack = input.getItem(i);
             if (stack.getItem() instanceof TraverseBoardItem) {
                 NavTargetData data = stack.get(AerocaliDataComponents.NAV_TARGET.get());
+
                 result.set(AerocaliDataComponents.NAV_TARGET.get(), data);
                 break;
             }
         }
         return result;
+    }
+
+    // Sets the Remaining Items duh
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
+        NonNullList<ItemStack> remaining = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+
+        for (int i = 0; i < input.size(); i++) {
+            ItemStack stack = input.getItem(i);
+
+            if (stack.getItem() instanceof TraverseBoardItem) {
+                remaining.set(i, stack.copy());
+            }
+        }
+        return remaining;
     }
 
     @Override

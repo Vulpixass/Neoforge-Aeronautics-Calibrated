@@ -24,11 +24,14 @@ public class AerocaliTabs {
                         output.accept(AerocaliItems.THERMAL_MECHANISM.get());
                         output.accept(AerocaliItems.IONIZED_THERMAL_MECHANISM.get());
                         output.accept(AerocaliBlocks.THRUSTER_ITEM.get());
+                        output.accept(AerocaliBlocks.CABLE_ITEM.get());
                         output.accept(AerocaliBlocks.GENERATOR_ITEM.get());
                         output.accept(AerocaliBlocks.INDUSTRIAL_GENERATOR_ITEM.get());
                         output.accept(AerocaliBlocks.CREATIVE_GENERATOR_ITEM.get());
+                        output.accept(AerocaliBlocks.MECHANICAL_ANVIL_ITEM.get());
                         output.accept(AerocaliBlocks.TRACKER_ITEM.get());
                         output.accept(AerocaliItems.TRAVERSE_BOARD.get());
+                        output.accept(AerocaliItems.SURVIVAL_PHYSICS_STAFF.get());
                     })
                     .build()
             );

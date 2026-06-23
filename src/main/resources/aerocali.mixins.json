@@ -3,10 +3,12 @@
   "package": "net.vulpixass.aerocali.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-
+    "common.AerocaliLeftClickMixin",
+    "common.AerocaliRightClickMixin"
   ],
   "client": [
-
+    "client.AerocaliGuiGraphicsMixin",
+    "client.AerocaliPhysicsStaffRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -5,10 +5,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
-import net.vulpixass.aerocali.content.block.custom.generator.BaseGeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.cable.CableBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.generator.creative.CreativeGeneratorBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.generator.industrial.IndustrialGeneratorBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.generator.regular.GeneratorBlockEntity;
+import net.vulpixass.aerocali.content.block.custom.mechanical_anvil.MechanicalAnvilBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlockEntity;
 import net.vulpixass.aerocali.content.block.custom.nav_tracker.NavigationTrackerBlockEntity;
 
@@ -36,4 +37,19 @@ public class AerocaliBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NavigationTrackerBlockEntity>> TRACKER = BLOCK_ENTITIES
             .register("tracker", () -> BlockEntityType.Builder.of(NavigationTrackerBlockEntity::new, AerocaliBlocks.TRACKER
                     .get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CableBlockEntity>> CABLE = BLOCK_ENTITIES
+            .register("cable", () -> BlockEntityType.Builder.of(CableBlockEntity::new, AerocaliBlocks.CABLE
+                    .get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MechanicalAnvilBlockEntity>> MECHANICAL_ANVIL =
+            BLOCK_ENTITIES.register("mechanical_anvil",
+                    () -> BlockEntityType.Builder.of(
+                            MechanicalAnvilBlockEntity::new,
+                            AerocaliBlocks.MECHANICAL_ANVIL.get(),
+                            AerocaliBlocks.LIGHT_MECHANICAL_ANVIL.get(),
+                            AerocaliBlocks.HEAVY_MECHANICAL_ANVIL.get(),
+                            AerocaliBlocks.SUPER_HEAVY_MECHANICAL_ANVIL.get()
+                    ).build(null)
+            );
 }
