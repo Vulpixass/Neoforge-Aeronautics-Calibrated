@@ -23,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.vulpixass.aerocali.content.block.AerocaliBlocks;
 import net.vulpixass.aerocali.content.block.custom.cable.CableBlock;
+import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlock;
 import net.vulpixass.aerocali.content.block.custom.thruster.ThrusterBlockEntity;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
 
@@ -274,21 +275,20 @@ public class PonderScenes {
     public static void thrusterUpgrading(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
-        BlockPos leverPos = util.grid().at(5, 2, 2);
-        BlockPos wirePos = util.grid().at(4, 2, 2);
-        BlockPos thrusterPos = util.grid().at(3, 2, 2);
+        BlockPos leverPos = util.grid().at(0, 1, 2);
+        BlockPos wirePos = util.grid().at(1, 1, 2);
+        BlockPos thrusterPos = util.grid().at(2, 1, 2);
         Vec3 thrusterVector3 = util.vector().blockSurface(thrusterPos, Direction.UP);
 
         scene.title("thruster_upgrading", "How to upgrade a Thruster");
-        scene.rotateCameraY(180);
-        scene.configureBasePlate(1, 0, 5);
-        scene.showBasePlate();
+        scene.configureBasePlate(0, 0, 5);
         scene.world().setKineticSpeed(util.select().everywhere(), 32.0f);
-        scene.world().showSection(util.select().everywhere(), Direction.DOWN);
+        scene.world().showSection(util.select().everywhere().substract(util.select().fromTo(2, 1, 3, 5, 1, 4))
+                .substract(util.select().position(6, 0, 5)), Direction.DOWN);
         scene.idle(10);
 
-        scene.overlay().showText(40).text("Normally the Thruster outputs fire particles with an okay amount of thrust and power consumption.")
-                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(3, 2, 2), Direction.UP)).placeNearTarget();
+        scene.overlay().showText(40).text("Normally the Thruster outputs regular thrust with the usage of Fuel.")
+                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
 
 
         scene.world().modifyBlock(leverPos, state -> {
@@ -301,7 +301,7 @@ public class PonderScenes {
         scene.idle(2);
         scene.world().modifyBlock(wirePos, state -> {
             if (state.hasProperty(RedStoneWireBlock.POWER)) {
-                return state.setValue(RedStoneWireBlock.POWER, 14);
+                return state.setValue(RedStoneWireBlock.POWER, 15);
             }
             return state;
         }, false);
@@ -323,6 +323,7 @@ public class PonderScenes {
             });
             scene.idle(1);
         }
+
         scene.world().modifyBlock(leverPos, state -> {
             if (state.hasProperty(LeverBlock.POWERED)) {
                 return state.setValue(LeverBlock.POWERED, false);
@@ -348,10 +349,19 @@ public class PonderScenes {
         scene.idle(25);
 
         scene.overlay().showText(30).text("By right clicking on it with an Ionized Thermal Mechanism...")
-                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(3, 2, 2), Direction.UP)).placeNearTarget();
+                .attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
         scene.idle(10);
         scene.overlay().showControls(thrusterVector3, Pointing.DOWN, 10).rightClick().withItem(AerocaliItems.IONIZED_THERMAL_MECHANISM.toStack());
-        scene.idle(50);
+        scene.idle(5);
+        scene.world().showSection(util.select().fromTo(2, 1, 3, 5, 1, 4).add(util.select().position(6, 0, 5)), Direction.DOWN);
+        scene.idle(5);
+        scene.world().modifyBlock(thrusterPos, state -> {
+            if (state.hasProperty(ThrusterBlock.ION_MODE)) {
+                return state.setValue(ThrusterBlock.ION_MODE, true);
+            }
+            return state;
+        }, false);
+        scene.idle(45);
 
         scene.world().modifyBlock(leverPos, state -> {
             if (state.hasProperty(LeverBlock.POWERED)) {
@@ -384,81 +394,102 @@ public class PonderScenes {
             });
             scene.idle(1);
         }
-        scene.overlay().showText(40).text("The Particles will become soul fire particles and the Thruster will require twice as much thrust and power " +
-                "consumption than normally").pointAt(util.vector().blockSurface(util.grid().at(3, 2, 2), Direction.UP)).placeNearTarget();
-        scene.idle(30);
+        scene.overlay().showText(40).text("The Thruster will become an Ion Thruster whilst giving double the Thrust and using FE instead of Fuel")
+                .pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP)).placeNearTarget();
+        scene.idle(40);
     }
 
     // Thruster Functionality Scene
     public static void thrusterFunctionality(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
-        BlockPos leverPos = util.grid().at(5, 2, 2);
-        BlockPos wirePos = util.grid().at(4, 2, 2);
-        BlockPos thrusterPos = util.grid().at(3, 2, 2);
-        Vec3 controlPos = util.vector().blockSurface(leverPos, Direction.UP);
-
         scene.title("thruster_functionality", "How the Thruster works");
-        scene.rotateCameraY(180);
-        scene.configureBasePlate(1, 0, 5);
+        scene.configureBasePlate(0, 0, 5);
         scene.showBasePlate();
         scene.idle(15);
-        scene.world().setKineticSpeed(util.select().everywhere(), 32.0f);
+        scene.world().showSection(util.select().position(2, 1, 2), Direction.DOWN);
+        scene.idle(5);
 
-        scene.world().showSection(util.select().cuboid(util.grid().at(1, 1, 0), util.grid().at(5, 0, 5)), Direction.UP);
-        scene.idle(2);
-        scene.world().showSection(util.select().position(util.grid().at(3, 2, 2)), Direction.DOWN);
-        scene.idle(10);
-        scene.overlay().showText(60).text("This is the main Thruster unit.").attachKeyFrame().pointAt(util.vector().blockSurface(util.grid().at(3, 2, 2),
+        scene.overlay().showText(30).text("This is the Thruster").pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2), Direction.UP))
+                .attachKeyFrame().placeNearTarget();
+        scene.idle(35);
+
+        scene.world().showSection(util.select().fromTo(2, 3, 3, 5, 0, 3)
+                .substract(util.select().fromTo(2, 0, 3, 4, 0, 3)), Direction.DOWN);
+
+        scene.idle(5);
+        scene.overlay().showText(30).text("By pumping a Fuel like Lava into it...").pointAt(util.vector().blockSurface(util.grid().at(2, 3, 3),
+                        Direction.UP)).placeNearTarget();
+
+        scene.idle(5);
+        scene.world().setKineticSpeed(util.select().everywhere(), 32f);
+        scene.idle(35);
+
+        scene.world().showSection(util.select().fromTo(0, 1, 2, 1, 1, 2), Direction.WEST);
+
+        scene.overlay().showText(20).text("And powering it with redstone...").pointAt(util.vector().blockSurface(util.grid().at(0, 1, 2),
                 Direction.UP)).placeNearTarget();
-        scene.idle(60);
-        scene.world().showSection(util.select().cuboid(util.grid().at(0, 0, 0), util.grid().at(3, 5, 1)), Direction.UP);
-        scene.idle(30);
-        scene.overlay().showText(60).text("By Powering it using a generator it gains FE.").attachKeyFrame().pointAt(util.vector().blockSurface(util.grid()
-                .at(3, 2, 1), Direction.UP)).placeNearTarget();
-        scene.idle(90);
-        scene.world().showSection(util.select().cuboid(util.grid().at(4, 2, 2), util.grid().at(5, 2, 2)), Direction.DOWN);
-        scene.idle(15);
-        scene.overlay().showText(15).text("When getting a redstone signal inputted...").attachKeyFrame().pointAt(util.vector().blockSurface(util.grid()
-                .at(5, 2, 2), Direction.UP)).placeNearTarget();
-        scene.idle(13);
-        scene.overlay().showControls(controlPos, Pointing.DOWN, 30).rightClick().withItem(Items.AIR.getDefaultInstance());
-        scene.idle(10);
-        scene.world().modifyBlock(leverPos, state -> {
-            if (state.hasProperty(LeverBlock.POWERED)) {
-                return state.setValue(LeverBlock.POWERED, true);
-            }
-            return state;
-        }, false);
+        scene.idle(25);
 
-        scene.idle(2);
-        scene.world().modifyBlock(wirePos, state -> {
-            if (state.hasProperty(RedStoneWireBlock.POWER)) {
-                return state.setValue(RedStoneWireBlock.POWER, 14);
-            }
-            return state;
-        }, false);
-        scene.idle(2);
-        scene.world().modifyBlock(thrusterPos, state -> {
+        scene.overlay().showControls(new Vec3(0, 1, 2), Pointing.LEFT, 10).rightClick();
+
+        scene.world().modifyBlock(new BlockPos(0, 1, 2), state -> {
             if (state.hasProperty(BlockStateProperties.POWERED)) {
                 return state.setValue(BlockStateProperties.POWERED, true);
             }
             return state;
         }, false);
 
-        // Spawns Particles of the Thruster
+        scene.world().modifyBlock(new BlockPos(1, 1, 2), state -> {
+            if (state.hasProperty(RedStoneWireBlock.POWER)) {
+                return state.setValue(RedStoneWireBlock.POWER, 15);
+            }
+            return state;
+        }, false);
+        scene.idle(1);
+
+        scene.world().modifyBlock(new BlockPos(2, 1, 2), state -> {
+            if (state.hasProperty(BlockStateProperties.POWERED)) {
+                return state.setValue(BlockStateProperties.POWERED, true);
+            }
+            return state;
+        }, false);
+
         for (int t = 0; t < 40; t++) {
-            scene.world().modifyBlockEntity(thrusterPos, ThrusterBlockEntity.class, thruster -> {
-                thruster.thrust = 5.0f;
+            scene.world().modifyBlockEntity(new BlockPos(2, 1, 2), ThrusterBlockEntity.class, thruster -> {
+                thruster.thrust = 50.0f;
                 thruster.ion = false;
 
                 thruster.spawnFlameParticles();
             });
             scene.idle(1);
         }
+
+        scene.world().modifyBlock(new BlockPos(0, 1, 2), state -> {
+            if (state.hasProperty(BlockStateProperties.POWERED)) {
+                return state.setValue(BlockStateProperties.POWERED, false);
+            }
+            return state;
+        }, false);
+
+        scene.world().modifyBlock(new BlockPos(1, 1, 2), state -> {
+            if (state.hasProperty(RedStoneWireBlock.POWER)) {
+                return state.setValue(RedStoneWireBlock.POWER, 0);
+            }
+            return state;
+        }, false);
+        scene.idle(1);
+
+        scene.world().modifyBlock(new BlockPos(2, 1, 2), state -> {
+            if (state.hasProperty(BlockStateProperties.POWERED)) {
+                return state.setValue(BlockStateProperties.POWERED, false);
+            }
+            return state;
+        }, false);
+
+        scene.idle(25);
+        scene.overlay().showText(20).text("It outputs Thrust!").pointAt(util.vector().blockSurface(util.grid().at(2, 1, 2),
+                Direction.UP)).placeNearTarget();
         scene.idle(20);
-        scene.overlay().showText(20).text("The Thruster turns on!").pointAt(util.vector().blockSurface(util.grid().at(3, 2, 2), Direction.UP))
-                .placeNearTarget();
-        scene.idle(30);
     }
 }

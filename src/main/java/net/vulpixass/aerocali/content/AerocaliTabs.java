@@ -18,7 +18,7 @@ public class AerocaliTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> AEROCALI_TAB =
             AEROCALI_TABS.register("aerocali_tab", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.aerocali_tab"))
-                    .icon(() -> new ItemStack(AerocaliItems.THERMAL_MECHANISM.get()))
+                    .icon(() -> new ItemStack(AerocaliBlocks.THRUSTER_ITEM.get()))
                     .displayItems((parameters, output) -> {
                         output.accept(AerocaliItems.NAVIGATION_ELEMENT.get());
                         output.accept(AerocaliItems.THERMAL_MECHANISM.get());

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:lava",
+    "tfmg:kerosene",
+    "createpropulsion:turpentine",
+    "createpropulsion:oxidizer"
+  ]
+}

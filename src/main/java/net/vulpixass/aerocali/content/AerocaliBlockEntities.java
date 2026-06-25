@@ -20,7 +20,7 @@ public class AerocaliBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ThrusterBlockEntity>> THRUSTER = BLOCK_ENTITIES
             .register("thruster", () -> BlockEntityType.Builder.of(ThrusterBlockEntity::new, AerocaliBlocks.THRUSTER
-                            .get()).build(null));
+                    .get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GeneratorBlockEntity>> GENERATOR = BLOCK_ENTITIES
             .register("generator", () -> BlockEntityType.Builder.of(GeneratorBlockEntity::new, AerocaliBlocks.GENERATOR

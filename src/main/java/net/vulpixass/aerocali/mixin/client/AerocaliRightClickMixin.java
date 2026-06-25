@@ -1,9 +1,7 @@
-package net.vulpixass.aerocali.mixin.common;
+package net.vulpixass.aerocali.mixin.client;
 
 import dev.simulated_team.simulated.content.physics_staff.PhysicsStaffClientHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
@@ -14,11 +12,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PhysicsStaffClientHandler.class)
-public class AerocaliLeftClickMixin {
+public class AerocaliRightClickMixin {
 
-    @Inject(method = "onItemPunched", at = @At("HEAD"))
-
-    private void aerocali$damageOnLeftClick(CallbackInfo ci) {
+    @Inject(method = "onItemUsed", at = @At("HEAD"))
+    private void aerocali$damageOnRightClick(CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null) return;
@@ -26,7 +23,7 @@ public class AerocaliLeftClickMixin {
         ItemStack stack = player.getMainHandItem();
 
         if (stack.is(AerocaliItems.SURVIVAL_PHYSICS_STAFF.get())) {
-            mc.getConnection().send(new DamageStaffPayload(25));
+            mc.getConnection().send(new DamageStaffPayload(5));
         }
     }
 }

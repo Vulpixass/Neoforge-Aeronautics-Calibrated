@@ -6,15 +6,25 @@ import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.Nullable;
 
 public class ThrustParticles extends TextureSheetParticle {
+    private final SpriteSet spriteSet;
+
     // Defines the custom (unused) regular Thruster Particles
     protected ThrustParticles(ClientLevel level, double x, double y, double z, SpriteSet spriteSet, double xSpeed, double ySpeed, double zSpeed) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed);
 
-        this.friction = 1.2f;
-        this.lifetime = 40;
+        this.spriteSet = spriteSet;
+        this.friction = 1.1f;
+        this.lifetime = 20;
         this.setSpriteFromAge(spriteSet);
-        this.quadSize *= 1.2f;
+        this.quadSize *= 2.5f;
+        this.scale(2.5f);
+        this.tick();
+    }
 
+    @Override
+    public void tick() {
+        super.tick();
+        this.setSpriteFromAge(spriteSet); // Progresses animation frames based on age
     }
 
     @Override

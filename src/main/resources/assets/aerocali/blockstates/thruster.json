@@ -1,33 +1,21 @@
 {
   "variants": {
-    "facing=north,ion_mode=false,powered=false": { "model": "aerocali:block/thruster_inactive" },
-    "facing=north,ion_mode=false,powered=true":  { "model": "aerocali:block/thruster" },
-    "facing=north,ion_mode=true,powered=false":  { "model": "aerocali:block/thruster_inactive" },
-    "facing=north,ion_mode=true,powered=true":   { "model": "aerocali:block/thruster_ion" },
+    "facing=north,ion_mode=false": { "model": "aerocali:block/thruster" },
+    "facing=north,ion_mode=true":  { "model": "aerocali:block/thruster_ion" },
 
-    "facing=south,ion_mode=false,powered=false": { "model": "aerocali:block/thruster_inactive", "y": 180 },
-    "facing=south,ion_mode=false,powered=true":  { "model": "aerocali:block/thruster", "y": 180 },
-    "facing=south,ion_mode=true,powered=false":  { "model": "aerocali:block/thruster_inactive", "y": 180 },
-    "facing=south,ion_mode=true,powered=true":   { "model": "aerocali:block/thruster_ion", "y": 180 },
+    "facing=south,ion_mode=false": { "model": "aerocali:block/thruster", "y": 180 },
+    "facing=south,ion_mode=true":  { "model": "aerocali:block/thruster_ion", "y": 180 },
 
-    "facing=west,ion_mode=false,powered=false":  { "model": "aerocali:block/thruster_inactive", "y": 270 },
-    "facing=west,ion_mode=false,powered=true":   { "model": "aerocali:block/thruster", "y": 270 },
-    "facing=west,ion_mode=true,powered=false":   { "model": "aerocali:block/thruster_inactive", "y": 270 },
-    "facing=west,ion_mode=true,powered=true":    { "model": "aerocali:block/thruster_ion", "y": 270 },
+    "facing=west,ion_mode=false":  { "model": "aerocali:block/thruster", "y": 270 },
+    "facing=west,ion_mode=true":   { "model": "aerocali:block/thruster_ion", "y": 270 },
 
-    "facing=east,ion_mode=false,powered=false":  { "model": "aerocali:block/thruster_inactive", "y": 90 },
-    "facing=east,ion_mode=false,powered=true":   { "model": "aerocali:block/thruster", "y": 90 },
-    "facing=east,ion_mode=true,powered=false":   { "model": "aerocali:block/thruster_inactive", "y": 90 },
-    "facing=east,ion_mode=true,powered=true":    { "model": "aerocali:block/thruster_ion", "y": 90 },
+    "facing=east,ion_mode=false":  { "model": "aerocali:block/thruster", "y": 90 },
+    "facing=east,ion_mode=true":   { "model": "aerocali:block/thruster_ion", "y": 90 },
 
-    "facing=up,ion_mode=false,powered=false":    { "model": "aerocali:block/thruster_inactive", "x": 270 },
-    "facing=up,ion_mode=false,powered=true":     { "model": "aerocali:block/thruster", "x": 270 },
-    "facing=up,ion_mode=true,powered=false":     { "model": "aerocali:block/thruster_inactive", "x": 270 },
-    "facing=up,ion_mode=true,powered=true":      { "model": "aerocali:block/thruster_ion", "x": 270 },
+    "facing=up,ion_mode=false":    { "model": "aerocali:block/thruster", "x": 270 },
+    "facing=up,ion_mode=true":     { "model": "aerocali:block/thruster_ion", "x": 270 },
 
-    "facing=down,ion_mode=false,powered=false":  { "model": "aerocali:block/thruster_inactive", "x": 90 },
-    "facing=down,ion_mode=false,powered=true":   { "model": "aerocali:block/thruster", "x": 90 },
-    "facing=down,ion_mode=true,powered=false":   { "model": "aerocali:block/thruster_inactive", "x": 90 },
-    "facing=down,ion_mode=true,powered=true":    { "model": "aerocali:block/thruster_ion", "x": 90 }
+    "facing=down,ion_mode=false":  { "model": "aerocali:block/thruster", "x": 90 },
+    "facing=down,ion_mode=true":   { "model": "aerocali:block/thruster_ion", "x": 90 }
   }
 }

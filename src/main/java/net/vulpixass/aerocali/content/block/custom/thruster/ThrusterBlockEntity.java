@@ -12,19 +12,28 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.vulpixass.aerocali.content.particle.AerocaliParticles;
+import net.vulpixass.aerocali.content.tags.AerocaliTags;
 import net.vulpixass.aerocali.util.config.AerocaliAllConfigs;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
@@ -33,6 +42,8 @@ import net.vulpixass.aerocali.util.JOMLConversion;
 import java.util.List;
 
 public class ThrusterBlockEntity extends BasePropellerBlockEntity implements BlockEntityPropeller {
+
+    private final FluidTank fuelTank = new FluidTank(1000, fluid -> fluid.is(AerocaliTags.Fluids.THRUSTER_FUEL));
 
     private final ThrusterEnergy energy = new ThrusterEnergy(5000, 5000, 5000);
 
@@ -98,24 +109,43 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
     public void tick() {
         super.tick();
 
-        ion = getBlockState().getValue(ThrusterBlock.ION_MODE);
+        // Update ion mode
+        boolean newIon = getBlockState().getValue(ThrusterBlock.ION_MODE);
+        if (newIon != ion) {
+            ion = newIon;
+
+            // Switching modes wipes the other storage
+            if (ion) {
+                fuelTank.setFluid(FluidStack.EMPTY);
+            } else {
+                energy.setEnergy(0);
+            }
+
+            setChanged();
+            sendData();
+        }
 
         int rs = getRedstonePower();
         boolean underwater = level.getFluidState(worldPosition).is(FluidTags.WATER);
 
-        int FEperTick = 100;
-        if (ion) FEperTick *= 2;
+        // Resource costs
+        int FEperTick = ion ? 200 : 0;
+        int mBperTick = ion ? 0 : 5;
 
-        boolean canRun = rs > 0 && (!underwater || ion);
+        // Resource availability
+        boolean hasEnergy = ion && energy.getEnergyStored() >= FEperTick;
+        boolean hasFuel = !ion && fuelTank.getFluidAmount() >= mBperTick;
+
+        boolean canRun = rs > 0 && (!underwater || ion) && (ion ? hasEnergy : hasFuel);
+
         float power;
 
-        boolean hasEnergy = energy.getEnergyStored() >= FEperTick;
-
+        // Stall handling
         if (stallTicks > 0) {
             stallTicks--;
             thrust = 0;
             airflow = 0;
-            rotationSpeed = 0; // Okay don't ask why this is here... I extend from the Propeller of Aeronautics so this just comes with it...
+            rotationSpeed = 0;
             active = false;
 
             if (!level.isClientSide) {
@@ -127,35 +157,42 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
             return;
         }
 
-
+        // Server-side powered state + sounds
         if (!level.isClientSide) {
             BlockState state = getBlockState();
-            // Set Thruster to Powered/Unpowered
-            if (state.getValue(ThrusterBlock.POWERED) != hasEnergy) {
-                level.setBlock(worldPosition, state.setValue(ThrusterBlock.POWERED, hasEnergy), 3);
+            boolean powered = ion ? hasEnergy : hasFuel;
+
+            if (state.getValue(ThrusterBlock.POWERED) != powered) {
+                level.setBlock(worldPosition, state.setValue(ThrusterBlock.POWERED, powered), 3);
             }
 
-            // Play Startup and burnout Sounds
-            if (hasEnergy && canRun && !active) {
-                level.playSound(null, worldPosition, AerocaliSounds.THRUSTER_START.get(), SoundSource.BLOCKS, 0.25f, 0.5f);
+            if (powered && canRun && !active) {
+                level.playSound(null, worldPosition, AerocaliSounds.THRUSTER_START.get(),
+                        SoundSource.BLOCKS, 0.25f, 0.5f);
                 startupTicks = 2;
-            } else if ((!hasEnergy || !canRun) && active) {
-                level.playSound(null, worldPosition, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.25f, 1f);
+            } else if ((!powered || !canRun) && active) {
+                level.playSound(null, worldPosition, SoundEvents.FIRE_EXTINGUISH,
+                        SoundSource.BLOCKS, 0.25f, 1f);
             }
         }
 
-        // sets Thrust of the Thruster
-        if (canRun && hasEnergy && energy.extractEnergy(FEperTick, true) == FEperTick) {
-            energy.extractEnergy(FEperTick, false);
+        // Thrust logic
+        if (canRun) {
+            // Consume resource
+            if (ion) energy.extractEnergy(FEperTick, false);
+            else fuelTank.drain(mBperTick, IFluidHandler.FluidAction.EXECUTE);
+
             power = rs / 15f;
-            thrust = (float) (power * getConfigThrust());
+            thrust = (float)(power * getConfigThrust());
+
+            // Ion mode = ×2 thrust
             if (ion) thrust *= 2;
 
             airflow = thrust * 0.8f;
             active = true;
 
         } else {
-            if (canRun) {stallTicks = 80;}
+            if (!ion && rs > 0) stallTicks = 80;
             thrust = 0;
             airflow = 0;
             rotationSpeed = 0;
@@ -163,17 +200,16 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
             return;
         }
 
-        if (thrust > 0) {rotationSpeed = power + 20;}
-        else {rotationSpeed = 0;}
+        // Propeller rotation (pretending to)
+        rotationSpeed = thrust > 0 ? power + 20 : 0;
 
         if (!level.isClientSide) {
             setChanged();
             sendData();
         }
 
-        // Damage Players and spawn Fire
+        // Damage + fire
         if (!level.isClientSide && thrust > 0) {
-
             Direction out = getBlockDirection();
             Vec3 dir = new Vec3(out.getStepX(), out.getStepY(), out.getStepZ()).normalize();
 
@@ -195,58 +231,64 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
                         living.hurt(level.damageSources().inFire(), 2.0f);
                         Block fireType = ion ? Blocks.SOUL_FIRE : Blocks.FIRE;
                         BlockPos pos = living.blockPosition();
-                        if (level.getBlockState(pos).isAir()) {
-                            level.setBlock(pos, fireType.defaultBlockState(), 3);
-                        }
+                        if (level.getBlockState(pos).isAir()) level.setBlock(pos, fireType.defaultBlockState(), 3);
                     }
                 }
             }
         }
+
+        // Thruster sound loop
         if (thrust > 0) {
-            // makes the No Usage Cooldown of the Thruster work
             if (startupTicks > 0) {
                 startupTicks--;
                 return;
             }
-            // Play the Thrusters Sound
+
             if (soundCooldown <= 0) {
-                if (ion) {level.playSound(null, worldPosition, AerocaliSounds.THRUSTER_ION.get(), SoundSource.BLOCKS
-                            , 0.0625f, 1f);
-                } else {level.playSound(null, worldPosition, AerocaliSounds.THRUSTER.get(), SoundSource.BLOCKS
-                            , 0.0625f, 1f);
+                if (ion) {
+                    level.playSound(null, worldPosition, AerocaliSounds.THRUSTER_ION.get(),
+                            SoundSource.BLOCKS, 0.0625f, 1f);
+                } else {
+                    level.playSound(null, worldPosition, AerocaliSounds.THRUSTER.get(),
+                            SoundSource.BLOCKS, 0.0625f, 1f);
                 }
                 soundCooldown = 15;
-            } else {soundCooldown--;}
+            } else soundCooldown--;
         }
     }
+
 
     // Spawn the Particles of the Thruster
     public void spawnFlameParticles() {
         if (level == null || !level.isClientSide) return;
 
         Direction out = getBlockDirection();
+        ParticleOptions particleType = ion ? AerocaliParticles.ION_THRUST_PARTICLES.get() : AerocaliParticles.THRUST_PARTICLES.get();
+        Vec3 base = Vec3.atCenterOf(worldPosition).add(new Vec3(out.getStepX(), out.getStepY(), out.getStepZ()).scale(1.0));
 
-        ParticleOptions particleType = ion ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.FLAME;
-
-        Vec3 base = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(out.getNormal()).scale(0.4));
         int count = (int) Mth.clamp(thrust * 1.2f, 2, 60);
+        Vec3 forward = new Vec3(out.getStepX(), out.getStepY(), out.getStepZ()).normalize().scale(0.15 + thrust * 0.015);
 
-        Vec3 forward = new Vec3(out.getStepX(), out.getStepY(), out.getStepZ()).scale(0.15 + thrust * 0.015);
+        Vec3 dir = forward.normalize();
+        Vec3 up = new Vec3(0, 1, 0);
+
+        if (Math.abs(dir.dot(up)) > 0.9) {up = new Vec3(1, 0, 0);}
+
+        Vec3 side = dir.cross(up).normalize();
+        Vec3 vertical = dir.cross(side).normalize();
+
         for (int i = 0; i < count; i++) {
+            double offsetAmount = 0.08;
+            Vec3 offset = side.scale(offsetAmount);
 
-            double spread = 0.25 + thrust * 0.01;
+            double waveSpeed = 0.15;
+            double waveSize = 0.03;
+            double t = (level.getGameTime() + i * 0.2) * waveSpeed;
 
-            double rx = (Math.random() - 0.5) * spread;
-            double ry = (Math.random() - 0.5) * spread;
-            double rz = (Math.random() - 0.5) * spread;
+            Vec3 wave = side.scale(Math.sin(t) * waveSize).add(vertical.scale(Math.cos(t) * waveSize));
+            Vec3 spawnPos = base.add(offset).add(wave);
 
-            Vec3 random = new Vec3(rx, ry, rz);
-            Vec3 dir = new Vec3(out.getStepX(), out.getStepY(), out.getStepZ());
-            random = random.subtract(dir.scale(random.dot(dir)));
-
-            Vec3 vel = forward.add(random.scale(0.2));
-            level.addParticle(particleType, base.x + random.x * 0.2, base.y + random.y * 0.2,
-                    base.z + random.z * 0.2, vel.x, vel.y, vel.z);
+            level.addParticle(particleType, spawnPos.x, spawnPos.y, spawnPos.z, forward.x, forward.y, forward.z);
         }
     }
 
@@ -289,6 +331,7 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         tag.putFloat("Thrust", thrust);
         tag.putFloat("Airflow", airflow);
         tag.putInt("Energy", energy.getEnergyStored());
+        if (!fuelTank.getFluid().isEmpty()) tag.put("Fuel", fuelTank.getFluid().save(registries));
     }
 
     // Lets the Thruster Read the saved info
@@ -298,10 +341,15 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
         if (tag.contains("Thrust")) thrust = tag.getFloat("Thrust");
         if (tag.contains("Airflow")) airflow = tag.getFloat("Airflow");
         if (tag.contains("Energy")) energy.setEnergy(tag.getInt("Energy"));
+        if (tag.contains("Fuel")) FluidStack.parse(registries, tag.getCompound("Fuel")).ifPresent(fuelTank::setFluid);
     }
 
     private int getRedstonePower() {
         return level != null ? level.getBestNeighborSignal(worldPosition) : 0;
+    }
+
+    public FluidTank getFuelTank() {
+        return fuelTank;
     }
 
     private static class ThrusterEnergy extends EnergyStorage {
@@ -318,13 +366,15 @@ public class ThrusterBlockEntity extends BasePropellerBlockEntity implements Blo
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-
         tooltip.add(Component.literal("    Thruster Stats:").withStyle(ChatFormatting.WHITE));
 
-        tooltip.add(Component.literal("     » Stored: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(energy.getEnergyStored() + " / " + energy.getMaxEnergyStored() + " FE")
-                        .withStyle(ChatFormatting.GOLD)));
-
+        if (ion) {
+            tooltip.add(Component.literal("     » FE: ").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(energy.getEnergyStored() + " / " + energy.getMaxEnergyStored() + " FE").withStyle(ChatFormatting.GOLD)));
+        } else {
+            tooltip.add(Component.literal("     » Fuel: ").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(fuelTank.getFluidAmount() + " / " + fuelTank.getCapacity() + "mb").withStyle(ChatFormatting.AQUA)));
+        }
         return true;
     }
 }

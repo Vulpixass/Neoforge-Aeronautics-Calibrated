@@ -57,14 +57,14 @@
   "aerocali.ponder.anvil_functionality.header": "How the Mechanical Anvil works",
   "aerocali.ponder.cable_functionality.header": "How the Electron Cable works",
 
-  "aerocali.ponder.thruster_functionality.text_1": "This is the main Thruster unit.",
-  "aerocali.ponder.thruster_functionality.text_2": "By Powering it using a generator it gains FE.",
-  "aerocali.ponder.thruster_functionality.text_3": "When getting a redstone signal inputted...",
-  "aerocali.ponder.thruster_functionality.text_4": "The Thruster turns on!",
+  "aerocali.ponder.thruster_functionality.text_1": "This is the Thruster",
+  "aerocali.ponder.thruster_functionality.text_2": "By pumping a Fuel like Lava into it...",
+  "aerocali.ponder.thruster_functionality.text_3": "And powering it with redstone...",
+  "aerocali.ponder.thruster_functionality.text_4": "It outputs Thrust!",
 
-  "aerocali.ponder.thruster_upgrading.text_1": "Normally the Thruster outputs fire particles with an okay amount of thrust and power consumption.",
+  "aerocali.ponder.thruster_upgrading.text_1": "Normally the Thruster outputs regular thrust with the usage of Fuel.",
   "aerocali.ponder.thruster_upgrading.text_2": "By right clicking on it with an Ionized Thermal Mechanism...",
-  "aerocali.ponder.thruster_upgrading.text_3": "The Particles will become soul fire particles and the Thruster will require twice as much thrust and power consumption than normally.",
+  "aerocali.ponder.thruster_upgrading.text_3": "The Thruster will become an Ion Thruster whilst giving double the Thrust and using FE instead of Fuel",
 
   "aerocali.ponder.generator_functionality.text_1": "This is the Generator.",
   "aerocali.ponder.generator_functionality.text_2": "When Powered by RPM it will generate FE",

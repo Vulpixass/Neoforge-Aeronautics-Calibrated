@@ -16,6 +16,8 @@ public class AerocaliParticles {
 
     public static final Supplier<SimpleParticleType> THRUST_PARTICLES =
             PARTICLE_TYPES.register("thrust_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> ION_THRUST_PARTICLES =
+            PARTICLE_TYPES.register("ion_thrust_particles", () -> new SimpleParticleType(true));
 
     public static void register(IEventBus eventBus) {
         PARTICLE_TYPES.register(eventBus);

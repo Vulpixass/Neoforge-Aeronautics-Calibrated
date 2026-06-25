@@ -2,6 +2,7 @@ package net.vulpixass.aerocali.content.block.custom.thruster;
 
 import dev.eriksonn.aeronautics.content.blocks.propeller.small.BasePropellerBlock;
 import dev.eriksonn.aeronautics.content.blocks.propeller.small.BasePropellerBlockEntity;
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -22,12 +23,27 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.vulpixass.aerocali.content.AerocaliBlockEntities;
 import net.vulpixass.aerocali.content.item.AerocaliItems;
 import net.vulpixass.aerocali.content.item.custom.IonUpgradeItem;
 
 public class ThrusterBlock extends BasePropellerBlock {
+    private static final VoxelShape SOUTH_SHAPE = Shapes.or(
+            Block.box(1, 1, 0, 15, 15, 2),
+            Block.box(0, 0, 4, 16, 16, 8),
+            Block.box(1, 1, 8, 15, 15, 10),
+            Block.box(2, 2, 10, 14, 14, 13),
+            Block.box(3, 3, 13, 13, 13, 17),
+            Block.box(4, 4, 17, 12, 12, 18),
+            Block.box(4, 4, 18, 12, 12, 20),
+            Block.box(10, 6, 18, 12, 10, 20),
+            Block.box(4, 10, 18, 12, 12, 20),
+            Block.box(4, 6, 18, 6, 10, 20),
+            Block.box(4, 4, 18, 12, 6, 20)
+    );
+    private static final VoxelShaper SHAPER = VoxelShaper.forDirectional(SOUTH_SHAPE, Direction.SOUTH);
 
     public static final BooleanProperty ION_MODE = BooleanProperty.create("ion_mode");
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
@@ -47,9 +63,13 @@ public class ThrusterBlock extends BasePropellerBlock {
         return AerocaliBlockEntities.THRUSTER.get();
     }
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        Direction facing = ctx.getHorizontalDirection().getOpposite();
+
+        if (ctx.getPlayer() != null && ctx.getPlayer().isShiftKeyDown()) facing = facing.getOpposite();
+        return this.defaultBlockState().setValue(FACING, facing).setValue(ION_MODE, false).setValue(POWERED, false);
     }
+
 
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -65,15 +85,7 @@ public class ThrusterBlock extends BasePropellerBlock {
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         Direction dir = state.getValue(FACING);
-        switch (dir) {
-            case UP -> {return Block.box(1, 1, 1, 15, 30, 15);}
-            case DOWN -> {return Block.box(1, -14, 1, 15, 15, 15);}
-            case EAST -> {return Block.box(1, 1, 1, 30, 15, 15);}
-            case WEST -> {return Block.box(-14, 1, 1, 15, 15, 15);}
-            case NORTH -> {return Block.box(1, 1, -14, 15, 15, 15);}
-            case SOUTH -> {return Block.box(1, 1, 1, 15, 15, 30);}
-        }
-        return Block.box(1, 1, 1, 15, 15, 15);
+        return SHAPER.get(dir);
     }
 
     @Override
@@ -110,4 +122,6 @@ public class ThrusterBlock extends BasePropellerBlock {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
     }
+
+
 }

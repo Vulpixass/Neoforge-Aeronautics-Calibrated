@@ -42,6 +42,7 @@ import net.vulpixass.aerocali.content.model.PartialModels;
 import net.vulpixass.aerocali.content.particle.AerocaliParticles;
 import net.vulpixass.aerocali.content.recipe.AerocaliRecipes;
 import net.vulpixass.aerocali.content.sound.AerocaliSounds;
+import net.vulpixass.aerocali.content.tags.AerocaliTags;
 import net.vulpixass.aerocali.data.AerocaliDataComponents;
 import net.vulpixass.aerocali.network.packet.DamageStaffPayload;
 import net.vulpixass.aerocali.network.packet.NavUpdatePayload;
@@ -75,6 +76,8 @@ public class AeronauticsCalibrated {
         AerocaliBlocks.BLOCKS.register(modEventBus);
         AerocaliItems.ITEMS.register(modEventBus);
         AerocaliTabs.AEROCALI_TABS.register(modEventBus);
+
+        AerocaliTags.Fluids.register();
 
         AerocaliBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         PartialModels.init();
@@ -125,8 +128,13 @@ public class AeronauticsCalibrated {
     @SubscribeEvent
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         // Make the BlockEntities connect to wires from other mods
+        // Thruster FE capability (ion mode)
         event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.THRUSTER.get(),
-                (thruster, ctx) -> thruster.getEnergyStorage());
+                (thruster, ctx) -> thruster.ion ? thruster.getEnergyStorage() : null);
+// Thruster fluid capability (normal mode)
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, AerocaliBlockEntities.THRUSTER.get(),
+                (thruster, side) -> thruster.ion ? null : thruster.getFuelTank());
+
         event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.GENERATOR.get(),
                 (generator, ctx) -> generator.getEnergyStorage());
         event.registerBlockEntity(AerocaliCapabilities.ENERGY, AerocaliBlockEntities.INDUSTRIAL_GENERATOR.get(),
@@ -140,10 +148,22 @@ public class AeronauticsCalibrated {
         // Depict where the wires can connect to power the Thruster
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, AerocaliBlockEntities.THRUSTER.get(),
                 (thruster, side) -> {
+                    if (!thruster.ion) return null;
                     if (side == null) return null;
 
                     Direction back = thruster.getBlockDirection().getOpposite();
                     if (side == back) return thruster.getEnergyStorage();
+
+                    return null;
+                });
+        // Depict where the pipes can connect to power the Thruster
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, AerocaliBlockEntities.THRUSTER.get(),
+                (thruster, side) -> {
+                    if (thruster.ion) return null;
+                    if (side == null) return null;
+
+                    Direction back = thruster.getBlockDirection().getOpposite();
+                    if (side == back) return thruster.getFuelTank();
 
                     return null;
                 });
